@@ -190,6 +190,17 @@
       gap: 10px;
     }
 
+    .scroll-progress {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 3px;
+      z-index: 120;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+      box-shadow: 0 0 18px rgba(34, 211, 238, 0.48);
+    }
+
     .icon-btn {
       border: 1px solid var(--border);
       color: var(--text);
@@ -198,6 +209,10 @@
       padding: 10px 14px;
       cursor: pointer;
       transition: 0.25s ease;
+    }
+
+    .mobile-toggle {
+      display: none;
     }
 
     .icon-btn:hover {
@@ -732,6 +747,23 @@
       display: none;
     }
 
+    .project-action {
+      width: 100%;
+      margin-top: 18px;
+      padding: 11px 13px;
+      border: 1px solid rgba(125, 211, 252, 0.26);
+      border-radius: 14px;
+      color: var(--text);
+      background: rgba(34, 211, 238, 0.10);
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .project-action:hover {
+      transform: translateY(-2px);
+      background: rgba(244, 114, 182, 0.14);
+    }
+
     .project-meta {
       display: flex;
       justify-content: space-between;
@@ -807,6 +839,232 @@
     .cmd:hover {
       transform: translateY(-2px);
       background: rgba(52, 211, 153, 0.16);
+    }
+
+    .lab-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .cockpit {
+      border-radius: 28px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      backdrop-filter: blur(22px);
+      box-shadow: var(--shadow);
+    }
+
+    .cockpit h3 {
+      margin-bottom: 10px;
+    }
+
+    .cockpit p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .pipeline-step {
+      min-height: 72px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px;
+      color: var(--muted);
+      background: var(--card-2);
+      cursor: pointer;
+      transition: .25s ease;
+      text-align: left;
+    }
+
+    .pipeline-step.active,
+    .pipeline-step:hover {
+      color: var(--text);
+      background: linear-gradient(135deg, rgba(34,211,238,.16), rgba(244,114,182,.12));
+      transform: translateY(-2px);
+    }
+
+    .pipeline-step strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--blue);
+    }
+
+    .control-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .control-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .control-row label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .control-row input {
+      accent-color: #38bdf8;
+    }
+
+    .cockpit-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .cockpit-kpi {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+    }
+
+    .cockpit-kpi strong {
+      display: block;
+      color: var(--green);
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .cockpit-kpi span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .activity-feed {
+      margin-top: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .activity-item {
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: var(--muted);
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 110;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(2, 6, 23, 0.72);
+      backdrop-filter: blur(18px);
+    }
+
+    .overlay.open {
+      display: flex;
+    }
+
+    .dialog {
+      width: min(760px, 100%);
+      max-height: min(760px, calc(100vh - 44px));
+      overflow: auto;
+      border-radius: 28px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.94);
+      box-shadow: 0 30px 120px rgba(0,0,0,.45);
+    }
+
+    [data-theme="light"] .dialog {
+      background: rgba(255,255,255,.96);
+    }
+
+    .dialog-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dialog-head h3 {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .dialog-head p,
+    .dialog-body p {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .dialog-close {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      background: var(--card-2);
+      padding: 8px 11px;
+      cursor: pointer;
+    }
+
+    .dialog-body {
+      padding: 22px;
+    }
+
+    .command-search {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 15px 16px;
+      color: var(--text);
+      background: var(--card-2);
+      outline: none;
+      margin-bottom: 14px;
+      font-size: 16px;
+    }
+
+    .command-results {
+      display: grid;
+      gap: 10px;
+    }
+
+    .command-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      color: var(--text);
+      background: var(--card-2);
+      cursor: pointer;
+      text-align: left;
+      transition: .2s ease;
+    }
+
+    .command-item:hover,
+    .command-item.active {
+      transform: translateY(-2px);
+      background: rgba(34, 211, 238, 0.14);
+    }
+
+    .command-item span {
+      color: var(--muted);
+      font-size: 13px;
     }
 
     .timeline {
@@ -1107,6 +1365,7 @@
 
     .robot-chat {
       width: min(360px, calc(100vw - 36px));
+      max-height: 0;
       border-radius: 26px;
       overflow: hidden;
       border: 1px solid var(--border);
@@ -1120,6 +1379,7 @@
     }
 
     .robot-chat.open {
+      max-height: 560px;
       transform: translateY(0) scale(1);
       opacity: 1;
       pointer-events: auto;
@@ -1238,11 +1498,31 @@
         display: none;
       }
 
+      body.menu-open nav {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        top: 74px;
+        z-index: 90;
+        display: grid;
+        gap: 6px;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--card);
+        backdrop-filter: blur(22px);
+      }
+
+      .mobile-toggle {
+        display: inline-flex;
+      }
+
       .hero-layout,
       .grid-2,
       .grid-3,
       .grid-4,
-      .skill-board {
+      .skill-board,
+      .lab-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1266,6 +1546,10 @@
         grid-template-columns: 1fr;
       }
 
+      .pipeline {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
       section {
         padding: 72px 6%;
       }
@@ -1287,6 +1571,20 @@
       .contact-box {
         padding: 32px 20px;
       }
+
+      .header-actions .icon-btn:not(.command-trigger):not(.mobile-toggle) {
+        display: none;
+      }
+
+      .theme-option {
+        padding: 8px;
+        font-size: 12px;
+      }
+
+      .pipeline,
+      .cockpit-kpis {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -1295,6 +1593,7 @@
   <canvas id="network"></canvas>
   <div class="noise"></div>
   <div class="mouse-light" id="mouseLight"></div>
+  <div class="scroll-progress" id="scrollProgress"></div>
 
   <header>
     <a class="logo" href="#home" aria-label="返回首页">
@@ -1318,7 +1617,9 @@
         <button class="theme-option active" type="button" data-theme-option="dark">🌙 黑夜</button>
         <button class="theme-option" type="button" data-theme-option="light">☀️ 白天</button>
       </div>
+      <button class="icon-btn command-trigger" type="button" data-open-command title="打开命令面板">⌘K</button>
       <a class="icon-btn" href="https://github.com/kioyurt/" target="_blank" rel="noopener noreferrer" title="打开 GitHub 主页">GitHub 主页 ↗</a>
+      <button class="icon-btn mobile-toggle" id="mobileToggle" type="button" aria-label="打开导航">☰</button>
     </div>
   </header>
 
@@ -1537,6 +1838,7 @@
           <h3>多模态研究笔记库</h3>
           <p>整理视觉语言模型、视频理解、跨模态对齐、推理增强和智能体相关论文，形成长期可维护的知识图谱。</p>
           <div class="chips"><span class="chip">VLM</span><span class="chip">Paper Notes</span><span class="chip">Reasoning</span></div>
+          <button class="project-action project-open" type="button">查看研究结构</button>
           <div class="project-meta"><span>Research</span><span>持续更新</span></div>
         </div>
 
@@ -1545,6 +1847,7 @@
           <h3>量化策略回测系统</h3>
           <p>用于因子分析、信号生成、策略回测、收益评估和风险控制的研究型工具框架。</p>
           <div class="chips"><span class="chip">Python</span><span class="chip">Backtest</span><span class="chip">Factor</span></div>
+          <button class="project-action project-open" type="button">查看系统模块</button>
           <div class="project-meta"><span>Quant</span><span>实习相关</span></div>
         </div>
 
@@ -1553,6 +1856,7 @@
           <h3>AI 个人网站</h3>
           <p>用 GitHub Pages 构建的个人品牌网站，展示研究兴趣、项目经历、技能栈和学习轨迹。</p>
           <div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span></div>
+          <button class="project-action project-open" type="button">查看交互设计</button>
           <div class="project-meta"><span>Web</span><span>已上线</span></div>
         </div>
 
@@ -1561,6 +1865,7 @@
           <h3>智能体实验台</h3>
           <p>构建一个可视化 Agent Demo，用于展示任务分解、工具调用、记忆检索和多步推理流程。</p>
           <div class="chips"><span class="chip">Agent</span><span class="chip">Tool Use</span><span class="chip">UI</span></div>
+          <button class="project-action project-open" type="button">查看 Agent 流程</button>
           <div class="project-meta"><span>AI App</span><span>计划中</span></div>
         </div>
 
@@ -1569,6 +1874,7 @@
           <h3>世界模型可视化</h3>
           <p>把环境状态、预测轨迹、规划路径和决策过程做成可交互界面，帮助理解智能体内部模拟。</p>
           <div class="chips"><span class="chip">World Model</span><span class="chip">Planning</span><span class="chip">Visualization</span></div>
+          <button class="project-action project-open" type="button">查看可视化方案</button>
           <div class="project-meta"><span>Research Demo</span><span>探索中</span></div>
         </div>
 
@@ -1577,6 +1883,7 @@
           <h3>数据仪表盘</h3>
           <p>构建一个面向研究和交易数据的 Dashboard，用图表展示指标、趋势、异常和策略表现。</p>
           <div class="chips"><span class="chip">Dashboard</span><span class="chip">API</span><span class="chip">Charts</span></div>
+          <button class="project-action project-open" type="button">查看数据视图</button>
           <div class="project-meta"><span>Full-stack</span><span>可扩展</span></div>
         </div>
       </div>
@@ -1591,17 +1898,52 @@
         <p>点击下面的命令按钮，可以像操作研究终端一样切换不同内容，让页面更有科技感和互动性。</p>
       </div>
 
-      <div class="terminal">
-        <div class="terminal-top">
-          <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-          <span>kioyurt@ai-lab: ~/research</span>
+      <div class="lab-grid">
+        <div class="terminal">
+          <div class="terminal-top">
+            <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <span>kioyurt@ai-lab: ~/research</span>
+          </div>
+          <div class="terminal-body" id="terminalBody"></div>
+          <div class="terminal-actions">
+            <button class="cmd" data-cmd="profile">cat profile.md</button>
+            <button class="cmd" data-cmd="research">show research.map</button>
+            <button class="cmd" data-cmd="quant">run quant_internship.py</button>
+            <button class="cmd" data-cmd="stack">print fullstack_stack.json</button>
+            <button class="cmd" data-cmd="agent">simulate agent.plan</button>
+            <button class="cmd" data-cmd="roadmap">open roadmap.yaml</button>
+          </div>
         </div>
-        <div class="terminal-body" id="terminalBody"></div>
-        <div class="terminal-actions">
-          <button class="cmd" data-cmd="profile">cat profile.md</button>
-          <button class="cmd" data-cmd="research">show research.map</button>
-          <button class="cmd" data-cmd="quant">run quant_internship.py</button>
-          <button class="cmd" data-cmd="stack">print fullstack_stack.json</button>
+
+        <div class="cockpit" aria-label="研究控制面板">
+          <h3>Research Cockpit</h3>
+          <p id="pipelineText">选择一个流程节点，观察研究型 AI 系统从数据输入到行动输出的运行重点。</p>
+          <div class="pipeline">
+            <button class="pipeline-step active" type="button" data-step="perception"><strong>01</strong>感知</button>
+            <button class="pipeline-step" type="button" data-step="reasoning"><strong>02</strong>推理</button>
+            <button class="pipeline-step" type="button" data-step="planning"><strong>03</strong>规划</button>
+            <button class="pipeline-step" type="button" data-step="action"><strong>04</strong>行动</button>
+          </div>
+          <div class="control-stack">
+            <div class="control-row">
+              <label for="signalRange"><span>数据质量</span><b id="signalValue">78</b></label>
+              <input id="signalRange" type="range" min="35" max="100" value="78" />
+            </div>
+            <div class="control-row">
+              <label for="modelRange"><span>模型能力</span><b id="modelValue">82</b></label>
+              <input id="modelRange" type="range" min="35" max="100" value="82" />
+            </div>
+            <div class="control-row">
+              <label for="systemRange"><span>工程成熟度</span><b id="systemValue">74</b></label>
+              <input id="systemRange" type="range" min="35" max="100" value="74" />
+            </div>
+          </div>
+          <div class="cockpit-kpis">
+            <div class="cockpit-kpi"><strong id="readinessScore">78</strong><span>综合就绪度</span></div>
+            <div class="cockpit-kpi"><strong id="riskScore">22</strong><span>系统风险</span></div>
+            <div class="cockpit-kpi"><strong id="iterationScore">4</strong><span>建议迭代数</span></div>
+          </div>
+          <div class="activity-feed" id="activityFeed"></div>
         </div>
       </div>
     </div>
@@ -1666,6 +2008,38 @@
     </div>
   </section>
 
+  <div class="overlay" id="commandOverlay" aria-hidden="true">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="commandTitle">
+      <div class="dialog-head">
+        <div>
+          <h3 id="commandTitle">Command Center</h3>
+          <p>搜索页面模块、项目、研究方向或快速动作。</p>
+        </div>
+        <button class="dialog-close" type="button" data-close-command>关闭</button>
+      </div>
+      <div class="dialog-body">
+        <input class="command-search" id="commandSearch" type="search" placeholder="输入 research、project、terminal、contact..." />
+        <div class="command-results" id="commandResults"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="projectModal" aria-hidden="true">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+      <div class="dialog-head">
+        <div>
+          <h3 id="projectModalTitle">项目详情</h3>
+          <p id="projectModalSubtitle">系统模块、技术栈与下一步迭代。</p>
+        </div>
+        <button class="dialog-close" type="button" data-close-project>关闭</button>
+      </div>
+      <div class="dialog-body">
+        <p id="projectModalBody"></p>
+        <div class="chips" id="projectModalChips"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="robot-companion" aria-label="AI 机器人助手 K-Bot">
     <div class="robot-chat" id="robotChat">
       <div class="robot-chat-header">
@@ -1681,6 +2055,7 @@
         <button type="button" data-question="介绍一下量化交易实习">量化实习</button>
         <button type="button" data-question="有什么项目可以看？">项目展示</button>
         <button type="button" data-question="你会哪些技术栈？">技术栈</button>
+        <button type="button" data-question="这个页面新增了哪些交互？">新增交互</button>
       </div>
       <div class="robot-input-row">
         <input id="robotInput" type="text" placeholder="和 K-Bot 聊聊，比如：什么是世界模型？" />
@@ -1729,6 +2104,7 @@
     const typing = document.getElementById("typing");
 
     function typeLoop() {
+      if (!typing) return;
       const word = roles[roleIndex];
       typing.textContent = deleting ? word.slice(0, charIndex--) : word.slice(0, charIndex++);
 
@@ -1746,19 +2122,22 @@
       setTimeout(typeLoop, deleting ? 45 : 86);
     }
 
-    typeLoop();
+    if (typing) typeLoop();
 
     const mouseLight = document.getElementById("mouseLight");
-    window.addEventListener("mousemove", (event) => {
-      mouseLight.style.left = event.clientX + "px";
-      mouseLight.style.top = event.clientY + "px";
-    });
+    if (mouseLight) {
+      window.addEventListener("mousemove", (event) => {
+        mouseLight.style.left = event.clientX + "px";
+        mouseLight.style.top = event.clientY + "px";
+      });
+    }
 
     const canvas = document.getElementById("network");
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas ? canvas.getContext("2d") : null;
     let points = [];
 
     function resizeCanvas() {
+      if (!canvas) return;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       points = Array.from({ length: Math.min(95, Math.floor(window.innerWidth / 16)) }, () => ({
@@ -1771,6 +2150,7 @@
     }
 
     function drawNetwork() {
+      if (!canvas || !ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       for (const p of points) {
@@ -1805,15 +2185,24 @@
       requestAnimationFrame(drawNetwork);
     }
 
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-    drawNetwork();
+    if (canvas && ctx) {
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+      drawNetwork();
+    }
 
     const reveals = document.querySelectorAll(".reveal");
     const navLinks = document.querySelectorAll("nav a");
     const sections = [...document.querySelectorAll("section[id]")];
+    const progressBar = document.getElementById("scrollProgress");
 
     function onScroll() {
+      if (progressBar) {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + "%";
+      }
+
       for (const element of reveals) {
         const rect = element.getBoundingClientRect();
         if (rect.top < window.innerHeight - 110) element.classList.add("active");
@@ -1833,12 +2222,25 @@
     window.addEventListener("scroll", onScroll);
     onScroll();
 
+    const mobileToggle = document.getElementById("mobileToggle");
+    if (mobileToggle) {
+      mobileToggle.addEventListener("click", () => {
+        document.body.classList.toggle("menu-open");
+      });
+    }
+
+    navLinks.forEach(link => {
+      link.addEventListener("click", () => document.body.classList.remove("menu-open"));
+    });
+
     const counters = document.querySelectorAll("[data-count]");
     let counted = false;
 
     function runCounters() {
       if (counted) return;
-      const heroBottom = document.querySelector(".metric-grid").getBoundingClientRect().top;
+      const metricGrid = document.querySelector(".metric-grid");
+      if (!metricGrid) return;
+      const heroBottom = metricGrid.getBoundingClientRect().top;
       if (heroBottom < window.innerHeight) {
         counted = true;
         counters.forEach(counter => {
@@ -1880,21 +2282,33 @@
       profile: `> cat profile.md\n\nname: kioyurt\nrole: AI Graduate Student\nexperience: Quant Trading Intern\nidentity: Researcher + Engineer + Builder\nmission: Build intelligent systems that perceive, reason, decide and act.`,
       research: `> show research.map\n\n[Multimodal Perception] -> [Cross-modal Reasoning] -> [Decision & Behavior]\n          |                         |                         |\n          v                         v                         v\n[Embodied Intelligence] <-> [World Models] <-> [Brain-Computer Interface]\n\nfocus: perception, reasoning, decision, behavior, embodiment, simulation, human-machine fusion`,
       quant: `> run quant_internship.py\n\nloading market data... done\nextracting factors... done\nrunning backtest... done\nevaluating risk... done\n\ninsight: Quant research trains rigorous data thinking, experimental discipline and system-level engineering.`,
-      stack: `> print fullstack_stack.json\n\n{\n  "frontend": ["HTML", "CSS", "JavaScript", "React/Vue"],\n  "backend": ["Python", "FastAPI", "Database", "API Design"],\n  "ai": ["PyTorch", "VLM", "Agent", "World Model"],\n  "data": ["Pandas", "Feature Engineering", "Backtesting", "Visualization"]\n}`
+      stack: `> print fullstack_stack.json\n\n{\n  "frontend": ["HTML", "CSS", "JavaScript", "React/Vue"],\n  "backend": ["Python", "FastAPI", "Database", "API Design"],\n  "ai": ["PyTorch", "VLM", "Agent", "World Model"],\n  "data": ["Pandas", "Feature Engineering", "Backtesting", "Visualization"]\n}`,
+      agent: `> simulate agent.plan\n\ninput: user goal + research context\nplanner: decompose into tasks\nmemory: retrieve notes, papers, code snippets\ntools: search, code, chart, evaluate\noutput: traceable action plan + UI preview\n\nstatus: prototype-ready`,
+      roadmap: `> open roadmap.yaml\n\nnext:\n  - replace demo cards with real project links\n  - add paper reading database\n  - connect GitHub activity feed\n  - build quant backtest dashboard\n  - publish agent experiment demos\n\npriority: ship small, iterate fast`
     };
 
+    let terminalTimer = null;
+
     function typeTerminal(text) {
+      if (!terminalBody || !text) return;
+      if (terminalTimer) clearInterval(terminalTimer);
       terminalBody.textContent = "";
       let i = 0;
-      const timer = setInterval(() => {
+      terminalTimer = setInterval(() => {
         terminalBody.textContent += text[i];
         i++;
-        if (i >= text.length) clearInterval(timer);
+        if (i >= text.length) {
+          clearInterval(terminalTimer);
+          terminalTimer = null;
+        }
       }, 12);
     }
 
     document.querySelectorAll(".cmd").forEach(button => {
-      button.addEventListener("click", () => typeTerminal(terminalTexts[button.dataset.cmd]));
+      button.addEventListener("click", () => {
+        const commandText = terminalTexts[button.dataset.cmd];
+        if (commandText) typeTerminal(commandText);
+      });
     });
 
     typeTerminal(terminalTexts.profile);
@@ -1903,7 +2317,11 @@
 
     function setTheme(theme) {
       document.body.dataset.theme = theme;
-      localStorage.setItem("kioyurt-theme", theme);
+      try {
+        localStorage.setItem("kioyurt-theme", theme);
+      } catch (error) {
+        // localStorage can be unavailable in restricted browser contexts.
+      }
       themeOptions.forEach(button => {
         button.classList.toggle("active", button.dataset.themeOption === theme);
       });
@@ -1913,8 +2331,212 @@
       button.addEventListener("click", () => setTheme(button.dataset.themeOption));
     });
 
-    const savedTheme = localStorage.getItem("kioyurt-theme");
+    let savedTheme = null;
+    try {
+      savedTheme = localStorage.getItem("kioyurt-theme");
+    } catch (error) {
+      savedTheme = null;
+    }
     setTheme(savedTheme === "light" ? "light" : "dark");
+
+    const commandOverlay = document.getElementById("commandOverlay");
+    const commandSearch = document.getElementById("commandSearch");
+    const commandResults = document.getElementById("commandResults");
+    const commandEntries = [
+      { title: "首页", hint: "返回 Hero 与核心简介", target: "#home" },
+      { title: "研究地图", hint: "多模态、具身智能、世界模型", target: "#research" },
+      { title: "能力栈", hint: "技能面板与技术关键词", target: "#skills" },
+      { title: "项目展示", hint: "筛选项目并打开详情", target: "#projects" },
+      { title: "研究终端", hint: "运行交互命令和控制台", target: "#lab" },
+      { title: "成长轨迹", hint: "学习、实习与构建路线", target: "#timeline" },
+      { title: "联系", hint: "GitHub 与邮箱入口", target: "#contact" },
+      { title: "打开 K-Bot", hint: "启动右下角 AI 助手", action: () => openRobotChat() },
+      { title: "切换亮色", hint: "Light theme", action: () => setTheme("light") },
+      { title: "切换暗色", hint: "Dark theme", action: () => setTheme("dark") }
+    ];
+
+    function closeCommandPalette() {
+      if (!commandOverlay) return;
+      commandOverlay.classList.remove("open");
+      commandOverlay.setAttribute("aria-hidden", "true");
+    }
+
+    function runCommand(entry) {
+      if (!entry) return;
+      closeCommandPalette();
+      if (entry.target) {
+        document.querySelector(entry.target)?.scrollIntoView({ behavior: "smooth" });
+      }
+      if (entry.action) entry.action();
+    }
+
+    function renderCommandResults(filter = "") {
+      if (!commandResults) return;
+      const query = filter.trim().toLowerCase();
+      const matches = commandEntries.filter(entry => {
+        const text = `${entry.title} ${entry.hint}`.toLowerCase();
+        return !query || text.includes(query);
+      });
+      commandResults.innerHTML = "";
+      matches.forEach((entry, index) => {
+        const button = document.createElement("button");
+        button.className = `command-item${index === 0 ? " active" : ""}`;
+        button.type = "button";
+        button.innerHTML = `<strong>${entry.title}</strong><span>${entry.hint}</span>`;
+        button.addEventListener("click", () => runCommand(entry));
+        commandResults.appendChild(button);
+      });
+    }
+
+    function openCommandPalette() {
+      if (!commandOverlay || !commandSearch) return;
+      renderCommandResults(commandSearch.value);
+      commandOverlay.classList.add("open");
+      commandOverlay.setAttribute("aria-hidden", "false");
+      setTimeout(() => commandSearch.focus(), 80);
+    }
+
+    document.querySelectorAll("[data-open-command]").forEach(button => {
+      button.addEventListener("click", openCommandPalette);
+    });
+
+    document.querySelectorAll("[data-close-command]").forEach(button => {
+      button.addEventListener("click", closeCommandPalette);
+    });
+
+    if (commandSearch) {
+      commandSearch.addEventListener("input", () => renderCommandResults(commandSearch.value));
+      commandSearch.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          const first = commandResults?.querySelector(".command-item");
+          if (first) first.click();
+        }
+      });
+    }
+
+    const projectModal = document.getElementById("projectModal");
+    const projectModalTitle = document.getElementById("projectModalTitle");
+    const projectModalSubtitle = document.getElementById("projectModalSubtitle");
+    const projectModalBody = document.getElementById("projectModalBody");
+    const projectModalChips = document.getElementById("projectModalChips");
+    const projectDetails = {
+      "多模态研究笔记库": "模块包括论文索引、方法标签、任务分类、实验复现记录和开放问题。适合作为长期研究资料库，并能继续扩展成可搜索的知识图谱。",
+      "量化策略回测系统": "核心模块包括数据清洗、因子计算、信号生成、组合构建、回测评估和风险分析。后续可连接可视化 Dashboard 与实验记录系统。",
+      "AI 个人网站": "当前页面已经从静态作品集升级为交互式前端：命令面板、项目弹窗、研究终端、控制台、主题系统与移动端导航都在单文件中运行。",
+      "智能体实验台": "可视化 Agent 的任务拆解、工具调用、记忆检索、执行轨迹和最终回答。适合展示 AI 应用工程能力，也适合沉淀研究 Demo。",
+      "世界模型可视化": "展示状态编码、未来预测、路径采样、规划评分和动作选择，让抽象的世界模型过程变成可观察的交互界面。",
+      "数据仪表盘": "面向研究和量化场景的指标视图，包含趋势、异常、收益风险、实验对比和模型状态，未来可接入真实 API。"
+    };
+
+    function closeProjectModal() {
+      if (!projectModal) return;
+      projectModal.classList.remove("open");
+      projectModal.setAttribute("aria-hidden", "true");
+    }
+
+    function openProjectModal(card) {
+      if (!projectModal || !card) return;
+      const title = card.querySelector("h3")?.textContent || "项目详情";
+      const summary = card.querySelector("p")?.textContent || "";
+      const meta = [...card.querySelectorAll(".project-meta span")].map(item => item.textContent).join(" · ");
+      const chips = [...card.querySelectorAll(".chip")].map(item => item.textContent);
+      if (projectModalTitle) projectModalTitle.textContent = title;
+      if (projectModalSubtitle) projectModalSubtitle.textContent = meta || "项目详情";
+      if (projectModalBody) projectModalBody.textContent = `${summary} ${projectDetails[title] || ""}`;
+      if (projectModalChips) {
+        projectModalChips.innerHTML = "";
+        chips.forEach(chip => {
+          const span = document.createElement("span");
+          span.className = "chip";
+          span.textContent = chip;
+          projectModalChips.appendChild(span);
+        });
+      }
+      projectModal.classList.add("open");
+      projectModal.setAttribute("aria-hidden", "false");
+    }
+
+    document.querySelectorAll(".project-open").forEach(button => {
+      button.addEventListener("click", event => {
+        event.stopPropagation();
+        openProjectModal(button.closest(".project-card"));
+      });
+    });
+
+    document.querySelectorAll("[data-close-project]").forEach(button => {
+      button.addEventListener("click", closeProjectModal);
+    });
+
+    [commandOverlay, projectModal].forEach(overlay => {
+      if (!overlay) return;
+      overlay.addEventListener("click", event => {
+        if (event.target === overlay) {
+          overlay === commandOverlay ? closeCommandPalette() : closeProjectModal();
+        }
+      });
+    });
+
+    window.addEventListener("keydown", event => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        openCommandPalette();
+      }
+      if (event.key === "Escape") {
+        closeCommandPalette();
+        closeProjectModal();
+        document.body.classList.remove("menu-open");
+      }
+    });
+
+    const pipelineText = document.getElementById("pipelineText");
+    const pipelineData = {
+      perception: "感知阶段关注多源输入质量：图像、文本、市场数据、传感器或用户意图先被清洗、对齐和编码。",
+      reasoning: "推理阶段把输入转化成结构化判断，重点是跨模态关系、因果线索、约束条件和可解释证据。",
+      planning: "规划阶段把目标拆成可执行路径，评估成本、风险、收益和工具调用顺序。",
+      action: "行动阶段输出结果并接收反馈，让系统可以继续迭代、监控和修正。"
+    };
+
+    document.querySelectorAll(".pipeline-step").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".pipeline-step").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        if (pipelineText) pipelineText.textContent = pipelineData[button.dataset.step] || pipelineData.perception;
+      });
+    });
+
+    const signalRange = document.getElementById("signalRange");
+    const modelRange = document.getElementById("modelRange");
+    const systemRange = document.getElementById("systemRange");
+    const activityFeed = document.getElementById("activityFeed");
+
+    function updateCockpit() {
+      if (!signalRange || !modelRange || !systemRange) return;
+      const signal = Number(signalRange.value);
+      const model = Number(modelRange.value);
+      const system = Number(systemRange.value);
+      const readiness = Math.round(signal * 0.32 + model * 0.38 + system * 0.30);
+      const risk = Math.max(4, 100 - readiness);
+      const iterations = Math.max(1, Math.ceil(risk / 7));
+      document.getElementById("signalValue").textContent = signal;
+      document.getElementById("modelValue").textContent = model;
+      document.getElementById("systemValue").textContent = system;
+      document.getElementById("readinessScore").textContent = readiness;
+      document.getElementById("riskScore").textContent = risk;
+      document.getElementById("iterationScore").textContent = iterations;
+      if (activityFeed) {
+        const mode = readiness >= 82 ? "系统可以进入展示级 Demo" : readiness >= 68 ? "适合继续打磨原型" : "需要优先补齐数据和工程链路";
+        activityFeed.innerHTML = [
+          `状态评估：${mode}`,
+          `建议重点：${signal < model ? "提升数据质量与标注一致性" : "增强模型评估和误差分析"}`,
+          `工程节奏：保留 ${iterations} 轮小步迭代窗口`
+        ].map(text => `<div class="activity-item">${text}</div>`).join("");
+      }
+    }
+
+    [signalRange, modelRange, systemRange].forEach(input => {
+      if (input) input.addEventListener("input", updateCockpit);
+    });
+    updateCockpit();
 
     const robotStage = document.getElementById("robotStage");
     const robotChat = document.getElementById("robotChat");
@@ -1947,7 +2569,7 @@
       },
       {
         keys: ["项目", "作品", "demo"],
-        reply: "项目区展示了多模态研究笔记库、量化策略回测系统、AI 个人网站、智能体实验台、世界模型可视化和数据仪表盘。你可以点击项目筛选按钮查看不同类别。"
+        reply: "项目区展示了多模态研究笔记库、量化策略回测系统、AI 个人网站、智能体实验台、世界模型可视化和数据仪表盘。你可以筛选类别，也可以打开项目详情弹窗查看模块和迭代方向。"
       },
       {
         keys: ["技术", "栈", "全栈", "工程"],
@@ -1956,10 +2578,15 @@
       {
         keys: ["联系", "邮箱", "github"],
         reply: "可以通过页面底部的 GitHub 或 Email 按钮联系 kioyurt。当前联系邮箱是 456456780qwe@gmail.com。"
+      },
+      {
+        keys: ["交互", "命令", "控制台", "cockpit"],
+        reply: "页面现在包含 Ctrl+K 命令面板、项目详情弹窗、Research Cockpit 控制台、滚动进度、移动端导航和增强研究终端。你可以在实验室区域调节三个滑杆观察系统指标变化。"
       }
     ];
 
     function addRobotMessage(text, type = "bot") {
+      if (!robotMessages) return;
       const message = document.createElement("div");
       message.className = `message ${type}`;
       message.textContent = text;
@@ -1975,37 +2602,49 @@
     }
 
     function sendRobotQuestion(question) {
-      const text = question.trim();
+      const text = String(question || "").trim();
       if (!text) return;
       addRobotMessage(text, "user");
-      robotInput.value = "";
-      robotBubble.textContent = "K-Bot 正在分析你的问题...";
+      if (robotInput) robotInput.value = "";
+      if (robotBubble) robotBubble.textContent = "K-Bot 正在分析你的问题...";
       setTimeout(() => {
         const reply = getRobotReply(text);
         addRobotMessage(reply, "bot");
-        robotBubble.textContent = reply.length > 42 ? reply.slice(0, 42) + "..." : reply;
+        if (robotBubble) robotBubble.textContent = reply.length > 42 ? reply.slice(0, 42) + "..." : reply;
       }, 420);
     }
 
     function openRobotChat() {
+      if (!robotChat || !robotMessages) return;
       robotChat.classList.add("open");
       if (!robotMessages.dataset.ready) {
         addRobotMessage("你好，我是 K-Bot。我可以带你了解 kioyurt 的研究方向、量化经历、项目和技术栈。", "bot");
         robotMessages.dataset.ready = "true";
       }
-      setTimeout(() => robotInput.focus(), 120);
+      if (robotInput) setTimeout(() => robotInput.focus(), 120);
     }
 
-    robotStage.addEventListener("click", () => {
-      robotChat.classList.toggle("open");
-      if (robotChat.classList.contains("open")) openRobotChat();
-    });
+    function closeRobotChat() {
+      if (robotChat) robotChat.classList.remove("open");
+    }
 
-    robotClose.addEventListener("click", () => robotChat.classList.remove("open"));
-    robotSend.addEventListener("click", () => sendRobotQuestion(robotInput.value));
-    robotInput.addEventListener("keydown", event => {
-      if (event.key === "Enter") sendRobotQuestion(robotInput.value);
-    });
+    if (robotStage && robotChat) {
+      robotStage.addEventListener("click", () => {
+        if (robotChat.classList.contains("open")) {
+          closeRobotChat();
+        } else {
+          openRobotChat();
+        }
+      });
+    }
+
+    if (robotClose) robotClose.addEventListener("click", closeRobotChat);
+    if (robotSend && robotInput) robotSend.addEventListener("click", () => sendRobotQuestion(robotInput.value));
+    if (robotInput) {
+      robotInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") sendRobotQuestion(robotInput.value);
+      });
+    }
 
     document.querySelectorAll(".quick-questions button").forEach(button => {
       button.addEventListener("click", () => {
@@ -2014,15 +2653,17 @@
       });
     });
 
-    window.addEventListener("mousemove", event => {
-      const rect = robotStage.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const eyeX = Math.max(-5, Math.min(5, (event.clientX - centerX) / 38));
-      const eyeY = Math.max(-4, Math.min(4, (event.clientY - centerY) / 42));
-      robotStage.style.setProperty("--eye-x", eyeX + "px");
-      robotStage.style.setProperty("--eye-y", eyeY + "px");
-    });
+    if (robotStage) {
+      window.addEventListener("mousemove", event => {
+        const rect = robotStage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const eyeX = Math.max(-5, Math.min(5, (event.clientX - centerX) / 38));
+        const eyeY = Math.max(-4, Math.min(4, (event.clientY - centerY) / 42));
+        robotStage.style.setProperty("--eye-x", eyeX + "px");
+        robotStage.style.setProperty("--eye-y", eyeY + "px");
+      });
+    }
   </script>
 </body>
 </html>
