@@ -4,12 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>kioyurt 的个人网站</title>
+  <meta name="description" content="kioyurt 的个人网站：学习、项目、作品、博客与联系方式。" />
 
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -23,7 +28,7 @@
     canvas {
       position: fixed;
       inset: 0;
-      z-index: -2;
+      z-index: -3;
     }
 
     .glow {
@@ -34,7 +39,7 @@
       background: linear-gradient(135deg, #00f5ff, #8b5cf6, #ec4899);
       filter: blur(120px);
       opacity: 0.35;
-      z-index: -1;
+      z-index: -2;
       animation: float 8s ease-in-out infinite alternate;
     }
 
@@ -49,6 +54,17 @@
       animation-delay: 2s;
     }
 
+    .mouse-light {
+      position: fixed;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.22), transparent 65%);
+      transform: translate(-50%, -50%);
+      z-index: -1;
+    }
+
     @keyframes float {
       from {
         transform: translateY(0) translateX(0);
@@ -60,12 +76,16 @@
 
     header {
       width: 100%;
-      padding: 28px 8%;
+      padding: 26px 8%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
+      position: sticky;
+      top: 0;
       z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(2, 6, 23, 0.45);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .logo {
@@ -79,9 +99,10 @@
 
     nav a {
       color: #cbd5e1;
-      margin-left: 24px;
+      margin-left: 22px;
       text-decoration: none;
       transition: 0.3s;
+      font-size: 15px;
     }
 
     nav a:hover {
@@ -89,18 +110,22 @@
       text-shadow: 0 0 12px #38bdf8;
     }
 
+    section {
+      padding: 90px 8%;
+    }
+
     .hero {
-      min-height: calc(100vh - 90px);
+      min-height: calc(100vh - 80px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 8%;
+      padding-top: 70px;
     }
 
     .card {
       width: 100%;
-      max-width: 1000px;
-      padding: 60px;
+      max-width: 1120px;
+      padding: 58px;
       border: 1px solid rgba(255, 255, 255, 0.16);
       background: rgba(15, 23, 42, 0.62);
       backdrop-filter: blur(20px);
@@ -136,7 +161,8 @@
       margin-bottom: 24px;
     }
 
-    h1 span {
+    h1 span,
+    .gradient-text {
       background: linear-gradient(90deg, #38bdf8, #a78bfa, #f472b6);
       -webkit-background-clip: text;
       color: transparent;
@@ -162,7 +188,7 @@
     }
 
     .intro {
-      max-width: 680px;
+      max-width: 760px;
       font-size: 18px;
       color: #cbd5e1;
       line-height: 1.8;
@@ -184,6 +210,7 @@
       background: linear-gradient(90deg, #2563eb, #7c3aed, #db2777);
       box-shadow: 0 0 24px rgba(59, 130, 246, 0.4);
       transition: 0.3s;
+      display: inline-block;
     }
 
     .btn:hover {
@@ -197,47 +224,301 @@
       box-shadow: none;
     }
 
-    .grid {
+    .hero-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
     }
 
-    .mini-card {
-      padding: 24px;
+    .stat-card,
+    .glass-card,
+    .project-card,
+    .timeline-item,
+    .blog-card {
       border-radius: 24px;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.12);
       transition: 0.3s;
     }
 
-    .mini-card:hover {
+    .stat-card {
+      padding: 22px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 34px;
+      color: #7dd3fc;
+      margin-bottom: 6px;
+    }
+
+    .stat-card span {
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+
+    .section-title {
+      max-width: 1120px;
+      margin: 0 auto 34px;
+    }
+
+    .section-title p {
+      color: #94a3b8;
+      line-height: 1.8;
+      margin-top: 12px;
+      max-width: 720px;
+    }
+
+    h2 {
+      font-size: clamp(30px, 5vw, 48px);
+      margin-bottom: 12px;
+    }
+
+    .content {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .glass-card {
+      padding: 28px;
+    }
+
+    .glass-card h3 {
+      color: #7dd3fc;
+      margin-bottom: 14px;
+      font-size: 22px;
+    }
+
+    .glass-card p,
+    .glass-card li {
+      color: #cbd5e1;
+      line-height: 1.8;
+    }
+
+    .glass-card ul {
+      list-style: none;
+    }
+
+    .glass-card li {
+      margin: 12px 0;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .glass-card li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: #f472b6;
+    }
+
+    .skill-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .skill-top {
+      display: flex;
+      justify-content: space-between;
+      color: #e2e8f0;
+      margin-bottom: 8px;
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #38bdf8, #8b5cf6, #f472b6);
+      animation: grow 1.5s ease forwards;
+      transform-origin: left;
+    }
+
+    @keyframes grow {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .project-card {
+      padding: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), transparent, rgba(244, 114, 182, 0.22));
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    .project-card:hover::before {
+      opacity: 1;
+    }
+
+    .project-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .project-card:hover,
+    .blog-card:hover,
+    .timeline-item:hover,
+    .glass-card:hover,
+    .stat-card:hover {
       transform: translateY(-8px);
-      background: rgba(56, 189, 248, 0.12);
       box-shadow: 0 0 30px rgba(56, 189, 248, 0.18);
     }
 
-    .mini-card h3 {
-      margin-bottom: 10px;
-      color: #7dd3fc;
+    .project-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      background: rgba(56, 189, 248, 0.14);
+      margin-bottom: 18px;
     }
 
-    .mini-card p {
+    .project-card h3 {
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .project-card p {
       color: #cbd5e1;
-      line-height: 1.6;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      font-size: 13px;
+      color: #bae6fd;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(125, 211, 252, 0.16);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 18px;
+    }
+
+    .timeline-item {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 20px;
+    }
+
+    .time {
+      color: #7dd3fc;
+      font-weight: bold;
+    }
+
+    .timeline-item h3 {
+      margin-bottom: 8px;
+    }
+
+    .timeline-item p {
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .blog-card {
+      padding: 24px;
+    }
+
+    .blog-card .date {
+      color: #7dd3fc;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .blog-card h3 {
+      margin-bottom: 12px;
+      font-size: 20px;
+    }
+
+    .blog-card p {
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
+    .contact-box {
+      text-align: center;
+      padding: 46px;
+      border-radius: 32px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.28), rgba(124, 58, 237, 0.22), rgba(219, 39, 119, 0.22));
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 0 60px rgba(168, 85, 247, 0.16);
+    }
+
+    .contact-box p {
+      color: #cbd5e1;
+      line-height: 1.8;
+      margin: 14px auto 26px;
+      max-width: 680px;
     }
 
     footer {
       text-align: center;
       color: #64748b;
-      padding: 30px;
+      padding: 34px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    @media (max-width: 768px) {
-      header {
-        padding: 22px 6%;
-      }
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: 0.8s ease;
+    }
 
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
       nav {
         display: none;
       }
@@ -246,8 +527,19 @@
         padding: 36px 24px;
       }
 
-      .grid {
+      .hero-grid,
+      .projects,
+      .blog-grid,
+      .about-layout {
         grid-template-columns: 1fr;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 70px 6%;
       }
 
       .typing {
@@ -259,20 +551,24 @@
 
 <body>
   <canvas id="stars"></canvas>
-
+  <div class="mouse-light" id="mouseLight"></div>
   <div class="glow one"></div>
   <div class="glow two"></div>
 
   <header>
     <div class="logo">KIOYURT</div>
     <nav>
+      <a href="#home">首页</a>
       <a href="#about">关于我</a>
       <a href="#skills">技能</a>
+      <a href="#projects">项目</a>
+      <a href="#timeline">成长</a>
+      <a href="#blog">想法</a>
       <a href="#contact">联系</a>
     </nav>
   </header>
 
-  <section class="hero">
+  <section class="hero" id="home">
     <div class="card">
       <div class="tagline">欢迎来到我的数字空间</div>
 
@@ -280,37 +576,231 @@
 
       <div class="typing" id="typing"></div>
 
-      <p class="intro" id="about">
-        这是我的个人网站。我会在这里展示我的学习、项目、作品和想法。
-        我正在探索编程、设计、AI 工具和互联网创造。
+      <p class="intro">
+        这是我的个人网站，也是我的互联网名片。我会在这里记录学习过程、展示项目作品、整理技术笔记，
+        也会把一些关于 AI、设计、编程和个人成长的想法放在这里。
       </p>
 
       <div class="buttons">
         <a class="btn" href="https://github.com/kioyurt" target="_blank">访问我的 GitHub</a>
+        <a class="btn secondary" href="#projects">查看项目</a>
         <a class="btn secondary" href="mailto:your-email@example.com">联系我</a>
       </div>
 
-      <div class="grid" id="skills">
-        <div class="mini-card">
-          <h3>前端开发</h3>
-          <p>HTML、CSS、JavaScript，打造漂亮又实用的网页。</p>
+      <div class="hero-grid">
+        <div class="stat-card">
+          <strong>01</strong>
+          <span>个人网站上线</span>
         </div>
-
-        <div class="mini-card">
-          <h3>个人项目</h3>
-          <p>记录自己的作品、学习成果和有趣的实验。</p>
+        <div class="stat-card">
+          <strong>04+</strong>
+          <span>正在学习的方向</span>
         </div>
-
-        <div class="mini-card" id="contact">
-          <h3>持续进化</h3>
-          <p>每天学习一点点，把网站变成自己的数字名片。</p>
+        <div class="stat-card">
+          <strong>∞</strong>
+          <span>持续更新与进化</span>
+        </div>
+        <div class="stat-card">
+          <strong>100%</strong>
+          <span>由我亲手打造</span>
         </div>
       </div>
     </div>
   </section>
 
+  <section id="about" class="reveal">
+    <div class="section-title">
+      <h2>关于 <span class="gradient-text">我</span></h2>
+      <p>这里可以放更完整的个人介绍，让访问者快速了解你是谁、你在做什么、你擅长什么。</p>
+    </div>
+
+    <div class="content about-layout">
+      <div class="glass-card">
+        <h3>我的简介</h3>
+        <p>
+          我是 kioyurt，正在学习前端开发、网站搭建、AI 工具和数字创作。
+          我喜欢把想法做成真实可见的作品，也希望通过这个网站记录自己的成长轨迹。
+        </p>
+        <br />
+        <p>
+          这个网站不是最终版本，而是一个会不断升级的作品。每一次修改，都是一次新的学习记录。
+        </p>
+      </div>
+
+      <div class="glass-card">
+        <h3>我正在关注</h3>
+        <ul>
+          <li>如何做出更有设计感的网页</li>
+          <li>如何用 AI 提高学习和创作效率</li>
+          <li>如何把个人项目变成作品集</li>
+          <li>如何长期积累自己的数字身份</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="reveal">
+    <div class="section-title">
+      <h2>我的 <span class="gradient-text">技能树</span></h2>
+      <p>技能可以先写学习中的内容，不一定要等完全精通。个人网站本身就是最好的练习项目。</p>
+    </div>
+
+    <div class="content about-layout">
+      <div class="glass-card skill-list">
+        <div>
+          <div class="skill-top"><span>HTML / 页面结构</span><span>80%</span></div>
+          <div class="bar"><span style="width: 80%"></span></div>
+        </div>
+        <div>
+          <div class="skill-top"><span>CSS / 视觉设计</span><span>75%</span></div>
+          <div class="bar"><span style="width: 75%"></span></div>
+        </div>
+        <div>
+          <div class="skill-top"><span>JavaScript / 互动效果</span><span>55%</span></div>
+          <div class="bar"><span style="width: 55%"></span></div>
+        </div>
+        <div>
+          <div class="skill-top"><span>GitHub Pages / 网站发布</span><span>70%</span></div>
+          <div class="bar"><span style="width: 70%"></span></div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <h3>我的学习方法</h3>
+        <p>
+          我会用“先做出来，再慢慢优化”的方式学习。先完成一个能上线的版本，再逐步加入动画、响应式、项目展示、博客内容和更好的设计。
+        </p>
+        <br />
+        <div class="chips">
+          <span class="chip">HTML</span>
+          <span class="chip">CSS</span>
+          <span class="chip">JavaScript</span>
+          <span class="chip">GitHub</span>
+          <span class="chip">AI Tools</span>
+          <span class="chip">Design</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="reveal">
+    <div class="section-title">
+      <h2>项目 <span class="gradient-text">展示</span></h2>
+      <p>这里可以展示你的作品。现在先放示例项目，之后你可以改成自己的真实项目。</p>
+    </div>
+
+    <div class="content projects">
+      <div class="project-card">
+        <div class="project-icon">🚀</div>
+        <h3>个人主页</h3>
+        <p>基于 GitHub Pages 搭建的个人网站，用来展示我的学习、项目和联系方式。</p>
+        <div class="chips">
+          <span class="chip">HTML</span>
+          <span class="chip">CSS</span>
+          <span class="chip">GitHub Pages</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🤖</div>
+        <h3>AI 工具清单</h3>
+        <p>整理我常用的 AI 工具、使用场景和学习心得，让效率工具真正服务创作。</p>
+        <div class="chips">
+          <span class="chip">AI</span>
+          <span class="chip">效率</span>
+          <span class="chip">笔记</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🎨</div>
+        <h3>网页设计练习</h3>
+        <p>练习不同风格的网页布局、配色、动效和响应式设计，持续提高审美和实现能力。</p>
+        <div class="chips">
+          <span class="chip">CSS</span>
+          <span class="chip">Animation</span>
+          <span class="chip">UI</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="timeline" class="reveal">
+    <div class="section-title">
+      <h2>成长 <span class="gradient-text">时间线</span></h2>
+      <p>把成长过程写出来，会让网站更真实，也能让你看到自己一步步前进。</p>
+    </div>
+
+    <div class="content timeline">
+      <div class="timeline-item">
+        <div class="time">Step 01</div>
+        <div>
+          <h3>创建 GitHub Pages 网站</h3>
+          <p>从 0 成本开始，完成第一个可以被别人访问的个人网站。</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time">Step 02</div>
+        <div>
+          <h3>优化视觉效果</h3>
+          <p>加入霓虹渐变、玻璃拟态、星空背景、打字动画和滚动出现效果。</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time">Step 03</div>
+        <div>
+          <h3>持续添加内容</h3>
+          <p>后续可以加入真实项目、学习笔记、文章页面、作品截图和自定义域名。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="blog" class="reveal">
+    <div class="section-title">
+      <h2>最近的 <span class="gradient-text">想法</span></h2>
+      <p>这里可以当作迷你博客，记录学习笔记、项目总结、灵感和复盘。</p>
+    </div>
+
+    <div class="content blog-grid">
+      <div class="blog-card">
+        <div class="date">2025 · 个人网站</div>
+        <h3>为什么我要做个人网站？</h3>
+        <p>因为个人网站是一个长期积累的数字名片，它可以展示我的能力、兴趣和成长过程。</p>
+      </div>
+
+      <div class="blog-card">
+        <div class="date">2025 · 学习记录</div>
+        <h3>从一个 index.html 开始</h3>
+        <p>不需要一开始就很复杂。先让网站跑起来，再一步步加入内容和交互效果。</p>
+      </div>
+
+      <div class="blog-card">
+        <div class="date">2025 · AI 创作</div>
+        <h3>用 AI 加速学习</h3>
+        <p>AI 可以帮我生成思路、解释代码、优化文案，但真正的成长来自持续动手实践。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="reveal">
+    <div class="content contact-box">
+      <h2>一起 <span class="gradient-text">连接</span></h2>
+      <p>
+        如果你想了解我的项目、交流学习经验，或者只是想看看这个网站之后会变成什么样，欢迎通过下面的方式找到我。
+      </p>
+      <div class="buttons" style="justify-content: center; margin-bottom: 0;">
+        <a class="btn" href="https://github.com/kioyurt" target="_blank">GitHub</a>
+        <a class="btn secondary" href="mailto:your-email@example.com">Email</a>
+        <a class="btn secondary" href="#home">返回顶部</a>
+      </div>
+    </div>
+  </section>
+
   <footer>
-    © 2025 kioyurt. Built with GitHub Pages.
+    © 2025 kioyurt. Built with GitHub Pages. Keep building, keep learning.
   </footer>
 
   <script>
@@ -318,7 +808,7 @@
       "前端学习者",
       "AI 工具探索者",
       "个人网站创建者",
-      "正在变强的创作者"
+      "持续成长的数字创作者"
     ];
 
     let wordIndex = 0;
@@ -346,14 +836,13 @@
         wordIndex = (wordIndex + 1) % words.length;
       }
 
-      setTimeout(typeEffect, isDeleting ? 60 : 120);
+      setTimeout(typeEffect, isDeleting ? 55 : 110);
     }
 
     typeEffect();
 
     const canvas = document.getElementById("stars");
     const ctx = canvas.getContext("2d");
-
     let stars = [];
 
     function resizeCanvas() {
@@ -364,12 +853,13 @@
 
     function createStars() {
       stars = [];
-      for (let i = 0; i < 120; i++) {
+      for (let i = 0; i < 160; i++) {
         stars.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           r: Math.random() * 1.8,
-          speed: Math.random() * 0.5 + 0.2
+          speed: Math.random() * 0.55 + 0.15,
+          alpha: Math.random() * 0.8 + 0.2
         });
       }
     }
@@ -380,7 +870,7 @@
       for (const star of stars) {
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
         ctx.fill();
 
         star.y += star.speed;
@@ -397,6 +887,26 @@
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
     drawStars();
+
+    const mouseLight = document.getElementById("mouseLight");
+    window.addEventListener("mousemove", (event) => {
+      mouseLight.style.left = event.clientX + "px";
+      mouseLight.style.top = event.clientY + "px";
+    });
+
+    const revealElements = document.querySelectorAll(".reveal");
+
+    function revealOnScroll() {
+      for (const element of revealElements) {
+        const rect = element.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 120) {
+          element.classList.add("active");
+        }
+      }
+    }
+
+    window.addEventListener("scroll", revealOnScroll);
+    revealOnScroll();
   </script>
 </body>
 </html>
