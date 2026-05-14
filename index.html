@@ -205,6 +205,39 @@
       box-shadow: 0 0 22px rgba(56, 189, 248, 0.22);
     }
 
+    .theme-switch {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+    }
+
+    .theme-option {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 11px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-size: 13px;
+    }
+
+    .theme-option:hover,
+    .theme-option.active {
+      color: #fff;
+      background: linear-gradient(90deg, #2563eb, #7c3aed, #db2777);
+      box-shadow: 0 0 18px rgba(124, 58, 237, 0.28);
+    }
+
+    [data-theme="light"] .theme-option:hover,
+    [data-theme="light"] .theme-option.active {
+      color: #fff;
+    }
+
     section {
       padding: 92px 7%;
       position: relative;
@@ -1281,8 +1314,11 @@
     </nav>
 
     <div class="header-actions">
-      <button class="icon-btn" id="themeBtn" type="button">🌙</button>
-      <a class="icon-btn" href="https://github.com/kioyurt" target="_blank" title="GitHub">GitHub</a>
+      <div class="theme-switch" aria-label="选择页面颜色模式">
+        <button class="theme-option active" type="button" data-theme-option="dark">🌙 黑夜</button>
+        <button class="theme-option" type="button" data-theme-option="light">☀️ 白天</button>
+      </div>
+      <a class="icon-btn" href="https://github.com/kioyurt/" target="_blank" rel="noopener noreferrer" title="打开 GitHub 主页">GitHub 主页 ↗</a>
     </div>
   </header>
 
@@ -1307,7 +1343,7 @@
         <div class="btn-row">
           <a class="btn" href="#research">探索研究方向 →</a>
           <a class="btn secondary" href="#projects">查看项目</a>
-          <a class="btn secondary" href="mailto:your-email@example.com">联系我</a>
+          <a class="btn secondary" href="mailto:456456780qwe@gmail.com">联系我</a>
         </div>
 
         <div class="metric-grid">
@@ -1624,7 +1660,7 @@
       </p>
       <div class="btn-row" style="justify-content:center; margin-bottom:0;">
         <a class="btn" href="https://github.com/kioyurt" target="_blank">GitHub</a>
-        <a class="btn secondary" href="mailto:your-email@example.com">Email</a>
+        <a class="btn secondary" href="mailto:456456780qwe@gmail.com">Email</a>
         <a class="btn secondary" href="#home">返回顶部</a>
       </div>
     </div>
@@ -1863,13 +1899,22 @@
 
     typeTerminal(terminalTexts.profile);
 
-    const themeBtn = document.getElementById("themeBtn");
-    themeBtn.addEventListener("click", () => {
-      const body = document.body;
-      const next = body.dataset.theme === "dark" ? "light" : "dark";
-      body.dataset.theme = next;
-      themeBtn.textContent = next === "dark" ? "🌙" : "☀️";
+    const themeOptions = document.querySelectorAll(".theme-option");
+
+    function setTheme(theme) {
+      document.body.dataset.theme = theme;
+      localStorage.setItem("kioyurt-theme", theme);
+      themeOptions.forEach(button => {
+        button.classList.toggle("active", button.dataset.themeOption === theme);
+      });
+    }
+
+    themeOptions.forEach(button => {
+      button.addEventListener("click", () => setTheme(button.dataset.themeOption));
     });
+
+    const savedTheme = localStorage.getItem("kioyurt-theme");
+    setTheme(savedTheme === "light" ? "light" : "dark");
 
     const robotStage = document.getElementById("robotStage");
     const robotChat = document.getElementById("robotChat");
@@ -1910,7 +1955,7 @@
       },
       {
         keys: ["联系", "邮箱", "github"],
-        reply: "可以通过页面底部的 GitHub 或 Email 按钮联系 kioyurt。记得把代码里的 your-email@example.com 替换成真实邮箱。"
+        reply: "可以通过页面底部的 GitHub 或 Email 按钮联系 kioyurt。当前联系邮箱是 456456780qwe@gmail.com。"
       }
     ];
 
