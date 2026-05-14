@@ -848,6 +848,358 @@
       transform: translateY(0);
     }
 
+    .robot-companion {
+      position: fixed;
+      right: 26px;
+      bottom: 26px;
+      z-index: 80;
+      display: grid;
+      justify-items: end;
+      gap: 14px;
+    }
+
+    .robot-stage {
+      position: relative;
+      width: 168px;
+      height: 210px;
+      cursor: pointer;
+      filter: drop-shadow(0 0 28px rgba(34, 211, 238, 0.32));
+      transform-origin: bottom center;
+      animation: robotFloat 3.4s ease-in-out infinite;
+    }
+
+    @keyframes robotFloat {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
+    }
+
+    .robot-scan {
+      position: absolute;
+      left: 50%;
+      bottom: -22px;
+      width: 150px;
+      height: 36px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(34, 211, 238, 0.38), transparent 68%);
+      animation: scanPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes scanPulse {
+      50% { transform: translateX(-50%) scale(1.18); opacity: 0.55; }
+    }
+
+    .robot-head {
+      position: absolute;
+      left: 31px;
+      top: 12px;
+      width: 106px;
+      height: 86px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 30% 22%, rgba(255,255,255,.75), transparent 16%),
+        linear-gradient(135deg, rgba(34,211,238,.92), rgba(124,58,237,.92), rgba(244,114,182,.84));
+      border: 1px solid rgba(255,255,255,.34);
+      box-shadow: inset 0 0 24px rgba(255,255,255,.18), 0 0 34px rgba(34,211,238,.36);
+      overflow: hidden;
+    }
+
+    .robot-head::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(transparent 0 46%, rgba(255,255,255,.18) 47% 52%, transparent 53% 100%);
+      background-size: 100% 18px;
+      opacity: .42;
+      animation: holoScan 1.8s linear infinite;
+    }
+
+    @keyframes holoScan {
+      to { transform: translateY(18px); }
+    }
+
+    .robot-antenna {
+      position: absolute;
+      left: 78px;
+      top: -8px;
+      width: 12px;
+      height: 28px;
+      border-radius: 99px;
+      background: linear-gradient(var(--cyan), var(--purple));
+      box-shadow: 0 0 16px rgba(34,211,238,.55);
+    }
+
+    .robot-antenna::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -11px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      background: var(--cyan);
+      box-shadow: 0 0 18px var(--cyan), 0 0 38px rgba(34,211,238,.5);
+      animation: antennaBlink 1.2s infinite alternate;
+    }
+
+    @keyframes antennaBlink {
+      from { opacity: .45; transform: translateX(-50%) scale(.85); }
+      to { opacity: 1; transform: translateX(-50%) scale(1.12); }
+    }
+
+    .robot-face {
+      position: absolute;
+      inset: 20px 18px;
+      border-radius: 20px;
+      background: rgba(2, 6, 23, .58);
+      border: 1px solid rgba(255,255,255,.14);
+      display: grid;
+      place-items: center;
+      z-index: 1;
+    }
+
+    .robot-eyes {
+      display: flex;
+      gap: 22px;
+      transform: translate(var(--eye-x, 0px), var(--eye-y, 0px));
+      transition: transform .08s linear;
+    }
+
+    .robot-eye {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan), 0 0 26px rgba(34,211,238,.72);
+      animation: eyeBlink 5s infinite;
+    }
+
+    @keyframes eyeBlink {
+      0%, 92%, 100% { transform: scaleY(1); }
+      95% { transform: scaleY(.14); }
+    }
+
+    .robot-mouth {
+      position: absolute;
+      bottom: 14px;
+      width: 34px;
+      height: 6px;
+      border-radius: 99px;
+      background: rgba(125, 211, 252, .8);
+      box-shadow: 0 0 10px rgba(125,211,252,.75);
+    }
+
+    .robot-body {
+      position: absolute;
+      left: 43px;
+      top: 100px;
+      width: 82px;
+      height: 78px;
+      border-radius: 24px 24px 30px 30px;
+      background: linear-gradient(135deg, rgba(15,23,42,.94), rgba(30,41,59,.82));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: inset 0 0 26px rgba(34,211,238,.12), 0 0 28px rgba(124,58,237,.22);
+    }
+
+    .robot-core-dot {
+      position: absolute;
+      left: 50%;
+      top: 24px;
+      width: 28px;
+      height: 28px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--cyan), var(--purple), var(--pink), var(--cyan));
+      box-shadow: 0 0 20px rgba(244,114,182,.46);
+      animation: rotate 3s linear infinite;
+    }
+
+    .robot-arm {
+      position: absolute;
+      top: 112px;
+      width: 28px;
+      height: 66px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(34,211,238,.88), rgba(124,58,237,.72));
+      border: 1px solid rgba(255,255,255,.18);
+      transform-origin: top center;
+    }
+
+    .robot-arm.left {
+      left: 14px;
+      transform: rotate(18deg);
+    }
+
+    .robot-arm.right {
+      right: 14px;
+      animation: robotWave 1.8s ease-in-out infinite;
+    }
+
+    @keyframes robotWave {
+      0%, 100% { transform: rotate(-18deg); }
+      50% { transform: rotate(-48deg); }
+    }
+
+    .robot-leg {
+      position: absolute;
+      top: 176px;
+      width: 34px;
+      height: 18px;
+      border-radius: 0 0 18px 18px;
+      background: rgba(34,211,238,.68);
+    }
+
+    .robot-leg.left { left: 48px; }
+    .robot-leg.right { right: 48px; }
+
+    .robot-bubble {
+      max-width: 280px;
+      padding: 14px 16px;
+      border-radius: 20px 20px 6px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      line-height: 1.6;
+      animation: bubbleIn .45s ease;
+    }
+
+    @keyframes bubbleIn {
+      from { opacity: 0; transform: translateY(12px) scale(.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .robot-chat {
+      width: min(360px, calc(100vw - 36px));
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--card);
+      backdrop-filter: blur(24px);
+      box-shadow: 0 0 70px rgba(34,211,238,.22);
+      transform: translateY(12px) scale(.96);
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s ease;
+    }
+
+    .robot-chat.open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .robot-chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 16px;
+      background: linear-gradient(90deg, rgba(34,211,238,.18), rgba(167,139,250,.16), rgba(244,114,182,.14));
+      border-bottom: 1px solid var(--border);
+    }
+
+    .robot-chat-title strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .robot-chat-title span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .robot-chat-close {
+      border: 0;
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 7px 10px;
+      cursor: pointer;
+    }
+
+    .robot-messages {
+      height: 260px;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      max-width: 86%;
+      padding: 10px 12px;
+      border-radius: 16px;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background: rgba(34,211,238,.12);
+      border: 1px solid rgba(125,211,252,.18);
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: linear-gradient(90deg, rgba(37,99,235,.34), rgba(124,58,237,.28));
+      border: 1px solid rgba(167,139,250,.22);
+    }
+
+    .quick-questions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 16px 14px;
+    }
+
+    .quick-questions button {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 10px;
+      background: var(--card-2);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12px;
+      transition: .2s ease;
+    }
+
+    .quick-questions button:hover {
+      transform: translateY(-2px);
+      background: rgba(34,211,238,.14);
+    }
+
+    .robot-input-row {
+      display: flex;
+      gap: 8px;
+      padding: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .robot-input-row input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 11px 13px;
+      color: var(--text);
+      background: var(--card-2);
+      outline: none;
+    }
+
+    .robot-input-row button {
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 14px;
+      color: #fff;
+      background: linear-gradient(90deg, #2563eb, #7c3aed, #db2777);
+      cursor: pointer;
+    }
+
     @media (max-width: 980px) {
       nav {
         display: none;
@@ -1278,6 +1630,50 @@
     </div>
   </section>
 
+  <div class="robot-companion" aria-label="AI 机器人助手 K-Bot">
+    <div class="robot-chat" id="robotChat">
+      <div class="robot-chat-header">
+        <div class="robot-chat-title">
+          <strong>K-Bot · AI Research Assistant</strong>
+          <span>可以问我研究方向、项目、量化实习或联系方式</span>
+        </div>
+        <button class="robot-chat-close" id="robotClose" type="button">×</button>
+      </div>
+      <div class="robot-messages" id="robotMessages"></div>
+      <div class="quick-questions">
+        <button type="button" data-question="你的研究方向是什么？">研究方向</button>
+        <button type="button" data-question="介绍一下量化交易实习">量化实习</button>
+        <button type="button" data-question="有什么项目可以看？">项目展示</button>
+        <button type="button" data-question="你会哪些技术栈？">技术栈</button>
+      </div>
+      <div class="robot-input-row">
+        <input id="robotInput" type="text" placeholder="和 K-Bot 聊聊，比如：什么是世界模型？" />
+        <button id="robotSend" type="button">发送</button>
+      </div>
+    </div>
+
+    <div class="robot-bubble" id="robotBubble">你好，我是 K-Bot。点击我，可以探索 kioyurt 的 AI 研究宇宙。</div>
+
+    <div class="robot-stage" id="robotStage" title="点击和 K-Bot 交互">
+      <div class="robot-scan"></div>
+      <div class="robot-antenna"></div>
+      <div class="robot-head">
+        <div class="robot-face">
+          <div class="robot-eyes">
+            <span class="robot-eye"></span>
+            <span class="robot-eye"></span>
+          </div>
+          <div class="robot-mouth"></div>
+        </div>
+      </div>
+      <div class="robot-arm left"></div>
+      <div class="robot-arm right"></div>
+      <div class="robot-body"><div class="robot-core-dot"></div></div>
+      <div class="robot-leg left"></div>
+      <div class="robot-leg right"></div>
+    </div>
+  </div>
+
   <footer>
     © 2025 kioyurt. AI Graduate Student · Quant Trading Intern · Multimodal Researcher · Full-stack Builder
   </footer>
@@ -1473,6 +1869,114 @@
       const next = body.dataset.theme === "dark" ? "light" : "dark";
       body.dataset.theme = next;
       themeBtn.textContent = next === "dark" ? "🌙" : "☀️";
+    });
+
+    const robotStage = document.getElementById("robotStage");
+    const robotChat = document.getElementById("robotChat");
+    const robotClose = document.getElementById("robotClose");
+    const robotMessages = document.getElementById("robotMessages");
+    const robotInput = document.getElementById("robotInput");
+    const robotSend = document.getElementById("robotSend");
+    const robotBubble = document.getElementById("robotBubble");
+
+    const robotReplies = [
+      {
+        keys: ["研究", "方向", "多模态"],
+        reply: "kioyurt 的研究兴趣聚焦在多模态感知、跨模态推理、决策与行为。更大的目标是理解智能体如何从信息输入走向行动输出。"
+      },
+      {
+        keys: ["量化", "交易", "实习", "金融"],
+        reply: "目前的工作经历是量化交易实习，主要价值在于训练数据思维、实验纪律、因子分析、回测评估和风险意识。"
+      },
+      {
+        keys: ["世界模型", "world"],
+        reply: "世界模型可以理解为智能体在内部构建的环境模拟器：预测未来状态，评估可能行动，并帮助模型在真实行动前先进行内部规划。"
+      },
+      {
+        keys: ["具身", "机器人", "embodied"],
+        reply: "具身智能关注智能体如何通过身体或工具和真实环境互动，形成感知、决策、控制、反馈的闭环。这个页面右下角的 K-Bot 就是一个小小的具身交互隐喻。"
+      },
+      {
+        keys: ["脑机", "接口", "bci"],
+        reply: "脑机接口是人机融合的重要方向，关注神经信号、认知状态与智能系统之间的连接，未来可能重塑交互方式。"
+      },
+      {
+        keys: ["项目", "作品", "demo"],
+        reply: "项目区展示了多模态研究笔记库、量化策略回测系统、AI 个人网站、智能体实验台、世界模型可视化和数据仪表盘。你可以点击项目筛选按钮查看不同类别。"
+      },
+      {
+        keys: ["技术", "栈", "全栈", "工程"],
+        reply: "技术栈包括 Python、PyTorch、多模态模型、Agent、数据分析、回测、FastAPI、前端交互、Dashboard 和全栈系统构建。"
+      },
+      {
+        keys: ["联系", "邮箱", "github"],
+        reply: "可以通过页面底部的 GitHub 或 Email 按钮联系 kioyurt。记得把代码里的 your-email@example.com 替换成真实邮箱。"
+      }
+    ];
+
+    function addRobotMessage(text, type = "bot") {
+      const message = document.createElement("div");
+      message.className = `message ${type}`;
+      message.textContent = text;
+      robotMessages.appendChild(message);
+      robotMessages.scrollTop = robotMessages.scrollHeight;
+    }
+
+    function getRobotReply(question) {
+      const lowerQuestion = question.toLowerCase();
+      const matched = robotReplies.find(item => item.keys.some(key => lowerQuestion.includes(key.toLowerCase())));
+      if (matched) return matched.reply;
+      return "这个问题很有意思。你可以问我：研究方向、量化交易实习、世界模型、具身智能、脑机接口、项目展示或技术栈。";
+    }
+
+    function sendRobotQuestion(question) {
+      const text = question.trim();
+      if (!text) return;
+      addRobotMessage(text, "user");
+      robotInput.value = "";
+      robotBubble.textContent = "K-Bot 正在分析你的问题...";
+      setTimeout(() => {
+        const reply = getRobotReply(text);
+        addRobotMessage(reply, "bot");
+        robotBubble.textContent = reply.length > 42 ? reply.slice(0, 42) + "..." : reply;
+      }, 420);
+    }
+
+    function openRobotChat() {
+      robotChat.classList.add("open");
+      if (!robotMessages.dataset.ready) {
+        addRobotMessage("你好，我是 K-Bot。我可以带你了解 kioyurt 的研究方向、量化经历、项目和技术栈。", "bot");
+        robotMessages.dataset.ready = "true";
+      }
+      setTimeout(() => robotInput.focus(), 120);
+    }
+
+    robotStage.addEventListener("click", () => {
+      robotChat.classList.toggle("open");
+      if (robotChat.classList.contains("open")) openRobotChat();
+    });
+
+    robotClose.addEventListener("click", () => robotChat.classList.remove("open"));
+    robotSend.addEventListener("click", () => sendRobotQuestion(robotInput.value));
+    robotInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") sendRobotQuestion(robotInput.value);
+    });
+
+    document.querySelectorAll(".quick-questions button").forEach(button => {
+      button.addEventListener("click", () => {
+        openRobotChat();
+        sendRobotQuestion(button.dataset.question);
+      });
+    });
+
+    window.addEventListener("mousemove", event => {
+      const rect = robotStage.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const eyeX = Math.max(-5, Math.min(5, (event.clientX - centerX) / 38));
+      const eyeY = Math.max(-4, Math.min(4, (event.clientY - centerY) / 42));
+      robotStage.style.setProperty("--eye-x", eyeX + "px");
+      robotStage.style.setProperty("--eye-y", eyeY + "px");
     });
   </script>
 </body>
