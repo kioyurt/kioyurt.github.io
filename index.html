@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none';" />
   <title>kioyurt | AI Researcher & Full-stack Builder</title>
   <meta name="description" content="kioyurt 的个人网站：人工智能研究生，多模态研究，量化交易实习，全栈工程，具身智能，世界模型，脑机接口。" />
 
@@ -43,6 +44,7 @@
 
     html {
       scroll-behavior: smooth;
+      scroll-padding-top: 88px;
     }
 
     body {
@@ -97,6 +99,74 @@
       transition: width 0.2s ease, height 0.2s ease;
     }
 
+    .data-rain {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: .46;
+    }
+
+    .data-bit {
+      position: absolute;
+      top: -80px;
+      left: var(--x);
+      color: rgba(125, 211, 252, .72);
+      font: 700 11px/1 "SFMono-Regular", Consolas, monospace;
+      text-shadow: 0 0 14px rgba(34, 211, 238, .72);
+      animation: dataFall var(--duration) linear infinite;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes dataFall {
+      0% { transform: translate3d(0, -12vh, 0); opacity: 0; }
+      10% { opacity: .78; }
+      88% { opacity: .52; }
+      100% { transform: translate3d(var(--drift), 112vh, 0); opacity: 0; }
+    }
+
+    .cursor-spark,
+    .click-ripple {
+      position: fixed;
+      pointer-events: none;
+      z-index: 130;
+      border-radius: 50%;
+    }
+
+    .cursor-spark {
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, rgba(255,255,255,.95), rgba(34,211,238,.75), transparent 72%);
+      transform: translate(-50%, -50%);
+      animation: sparkFade .62s ease-out forwards;
+      mix-blend-mode: screen;
+    }
+
+    @keyframes sparkFade {
+      to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(2.8);
+      }
+    }
+
+    .click-ripple {
+      width: 14px;
+      height: 14px;
+      border: 1px solid rgba(34, 211, 238, .8);
+      box-shadow: 0 0 28px rgba(244, 114, 182, .34);
+      transform: translate(-50%, -50%);
+      animation: rippleOut .72s ease-out forwards;
+    }
+
+    @keyframes rippleOut {
+      to {
+        width: 120px;
+        height: 120px;
+        opacity: 0;
+      }
+    }
+
     a {
       color: inherit;
     }
@@ -105,11 +175,11 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      display: flex;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 18px 7%;
+      gap: clamp(14px, 2vw, 28px);
+      padding: 14px 7%;
       backdrop-filter: blur(22px);
       background: rgba(2, 6, 23, 0.44);
       border-bottom: 1px solid var(--border);
@@ -151,15 +221,18 @@
     nav {
       display: flex;
       align-items: center;
-      gap: 18px;
+      justify-content: center;
+      gap: clamp(10px, 1.35vw, 18px);
+      min-width: 0;
     }
 
     nav a {
       color: var(--muted);
       text-decoration: none;
-      font-size: 14px;
+      font-size: 13px;
       transition: 0.25s ease;
       position: relative;
+      white-space: nowrap;
     }
 
     nav a::after {
@@ -188,6 +261,13 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      justify-content: flex-end;
+      min-width: 0;
+    }
+
+    .director-trigger {
+      border-color: rgba(250, 204, 21, .28);
+      background: linear-gradient(90deg, rgba(250, 204, 21, .14), rgba(244, 114, 182, .12));
     }
 
     .scroll-progress {
@@ -241,6 +321,157 @@
       font-size: 13px;
     }
 
+    .director-hud,
+    .director-dock,
+    .director-rail {
+      position: fixed;
+      z-index: 95;
+    }
+
+    .director-hud {
+      left: 7%;
+      top: 92px;
+      width: min(420px, calc(100% - 32px));
+      padding: 18px;
+      border: 1px solid rgba(250, 204, 21, .26);
+      border-radius: 18px;
+      background: rgba(2, 6, 23, .62);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 0 50px rgba(250, 204, 21, .12);
+      opacity: 0;
+      transform: translateY(-12px);
+      pointer-events: none;
+      transition: .3s ease;
+    }
+
+    [data-theme="light"] .director-hud {
+      background: rgba(255, 255, 255, .76);
+    }
+
+    body.director-mode .director-hud {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .director-hud small {
+      display: block;
+      color: var(--yellow);
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .director-hud strong {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .director-hud p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .director-progress {
+      height: 4px;
+      margin-top: 14px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, .20);
+      overflow: hidden;
+    }
+
+    .director-progress span {
+      display: block;
+      width: var(--director-progress, 0%);
+      height: 100%;
+      background: linear-gradient(90deg, var(--yellow), var(--pink), var(--cyan));
+      transition: width .35s ease;
+    }
+
+    .director-dock {
+      left: 50%;
+      bottom: 20px;
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(2, 6, 23, .68);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 18px 70px rgba(0, 0, 0, .26);
+      transform: translateX(-50%);
+    }
+
+    [data-theme="light"] .director-dock {
+      background: rgba(255, 255, 255, .74);
+    }
+
+    .director-dock button,
+    .director-rail button {
+      border: 1px solid transparent;
+      color: var(--text);
+      background: transparent;
+      cursor: pointer;
+      transition: .25s ease;
+    }
+
+    .director-dock button {
+      min-width: 42px;
+      min-height: 42px;
+      border-radius: 999px;
+      padding: 0 14px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .director-dock button:hover,
+    .director-dock button.active {
+      border-color: rgba(250, 204, 21, .34);
+      background: linear-gradient(90deg, rgba(250, 204, 21, .18), rgba(34, 211, 238, .12));
+      transform: translateY(-2px);
+    }
+
+    .director-rail {
+      right: 18px;
+      top: 50%;
+      display: grid;
+      gap: 10px;
+      transform: translateY(-50%);
+    }
+
+    .director-rail button {
+      width: 10px;
+      height: 34px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, .28);
+    }
+
+    .director-rail button.active {
+      background: linear-gradient(var(--yellow), var(--pink), var(--cyan));
+      box-shadow: 0 0 18px rgba(250, 204, 21, .24);
+    }
+
+    body.focus-mode header,
+    body.focus-mode .robot-companion,
+    body.focus-mode .data-rain,
+    body.focus-mode .mouse-light {
+      opacity: .16;
+      transition: opacity .3s ease;
+    }
+
+    body.focus-mode .director-dock,
+    body.focus-mode .director-hud,
+    body.focus-mode .director-rail {
+      opacity: 1;
+    }
+
+    body.director-mode section[id] {
+      scroll-margin-top: 92px;
+    }
+
     .theme-option:hover,
     .theme-option.active {
       color: #fff;
@@ -254,27 +485,28 @@
     }
 
     section {
-      padding: 92px 7%;
+      padding: clamp(72px, 8vw, 104px) 7%;
       position: relative;
     }
 
     .content {
-      max-width: 1180px;
+      width: min(1180px, 100%);
       margin: 0 auto;
     }
 
     .hero {
-      min-height: calc(100vh - 74px);
+      min-height: calc(100svh - 64px);
       display: grid;
       place-items: center;
-      padding-top: 70px;
+      padding-top: clamp(44px, 6vw, 78px);
+      padding-bottom: clamp(42px, 6vw, 74px);
     }
 
     .hero-layout {
-      max-width: 1180px;
+      width: min(1240px, 100%);
       display: grid;
-      grid-template-columns: 1.12fr 0.88fr;
-      gap: 30px;
+      grid-template-columns: minmax(0, 1.02fr) minmax(360px, .98fr);
+      gap: clamp(22px, 3.5vw, 52px);
       align-items: center;
     }
 
@@ -291,8 +523,8 @@
     }
 
     .hero-card {
-      padding: 44px;
-      border-radius: 34px;
+      padding: clamp(30px, 4vw, 46px);
+      border-radius: 24px;
       position: relative;
       overflow: hidden;
     }
@@ -310,7 +542,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .badge {
@@ -325,10 +557,16 @@
       font-size: 13px;
     }
 
+    .hero-card .badge:nth-child(3) {
+      color: var(--green);
+      border-color: rgba(52, 211, 153, .28);
+      background: rgba(52, 211, 153, .10);
+    }
+
     .hero h1 {
       font-size: clamp(44px, 7vw, 88px);
       line-height: 1.02;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
       letter-spacing: -2.5px;
     }
 
@@ -340,9 +578,9 @@
 
     .typing {
       min-height: 35px;
-      font-size: 22px;
+      font-size: clamp(18px, 2vw, 22px);
       color: var(--muted);
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
 
     .typing::after {
@@ -358,17 +596,17 @@
 
     .hero-intro {
       color: var(--muted);
-      line-height: 1.9;
+      line-height: 1.82;
       font-size: 17px;
       max-width: 720px;
-      margin-bottom: 30px;
+      margin-bottom: 26px;
     }
 
     .btn-row {
       display: flex;
       flex-wrap: wrap;
       gap: 14px;
-      margin-bottom: 32px;
+      margin-bottom: 26px;
     }
 
     .btn {
@@ -401,12 +639,13 @@
     .metric-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      gap: 10px;
     }
 
     .metric {
-      padding: 18px;
-      border-radius: 22px;
+      min-height: 104px;
+      padding: 16px;
+      border-radius: 16px;
       background: var(--card-2);
       border: 1px solid var(--border);
       transition: 0.25s ease;
@@ -430,8 +669,8 @@
     }
 
     .orbit-panel {
-      min-height: 620px;
-      border-radius: 38px;
+      min-height: clamp(520px, 58vw, 660px);
+      border-radius: 24px;
       position: relative;
       overflow: hidden;
       display: grid;
@@ -442,6 +681,19 @@
         rgba(15, 23, 42, 0.48);
       backdrop-filter: blur(22px);
       box-shadow: var(--shadow);
+      transform: perspective(1200px) rotateY(-4deg);
+      transform-origin: center;
+    }
+
+    .orbit-panel::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 30px;
+      border: 1px solid rgba(250, 204, 21, .16);
+      transform: perspective(900px) rotateX(58deg) rotateZ(-18deg);
+      pointer-events: none;
+      box-shadow: 0 0 36px rgba(250, 204, 21, .10);
     }
 
     .ai-core {
@@ -503,6 +755,170 @@
     .n3 { bottom: 94px; right: 80px; }
     .n4 { bottom: 70px; left: 70px; }
     .n5 { top: 180px; left: 26px; }
+
+    .universe-3d {
+      min-height: min(980px, 96svh);
+      padding: 0;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 72% 28%, rgba(250, 204, 21, .15), transparent 24%),
+        radial-gradient(circle at 18% 72%, rgba(52, 211, 153, .16), transparent 25%),
+        linear-gradient(135deg, rgba(2, 6, 23, .95), rgba(15, 23, 42, .86));
+    }
+
+    .universe-3d::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(2, 6, 23, .58), transparent 42%, rgba(2, 6, 23, .26)),
+        linear-gradient(0deg, rgba(2, 6, 23, .72), transparent 42%);
+    }
+
+    [data-theme="light"] .universe-3d {
+      background:
+        radial-gradient(circle at 72% 28%, rgba(250, 204, 21, .18), transparent 24%),
+        radial-gradient(circle at 18% 72%, rgba(52, 211, 153, .16), transparent 25%),
+        linear-gradient(135deg, rgba(248, 250, 252, .96), rgba(224, 242, 254, .72));
+    }
+
+    [data-theme="light"] .universe-3d::after {
+      background:
+        linear-gradient(90deg, rgba(248, 250, 252, .68), transparent 42%, rgba(248, 250, 252, .28)),
+        linear-gradient(0deg, rgba(248, 250, 252, .74), transparent 42%);
+    }
+
+    .universe-3d canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .universe-shell {
+      position: relative;
+      z-index: 2;
+      min-height: min(980px, 96svh);
+      display: grid;
+      align-content: end;
+      gap: 24px;
+      padding: clamp(88px, 10vh, 128px) 7% clamp(54px, 7vh, 84px);
+      pointer-events: none;
+    }
+
+    .universe-copy {
+      width: min(740px, 100%);
+      text-wrap: balance;
+    }
+
+    .universe-copy h2 {
+      font-size: clamp(40px, 6.4vw, 86px);
+      max-width: 850px;
+    }
+
+    .universe-copy p {
+      color: var(--muted);
+      line-height: 1.85;
+      max-width: 680px;
+      margin-top: 18px;
+      font-size: 16px;
+    }
+
+    .universe-hud {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 22px;
+      pointer-events: auto;
+    }
+
+    .universe-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 10px;
+      width: min(620px, 100%);
+    }
+
+    .universe-kpi {
+      min-height: 82px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(12px);
+    }
+
+    .universe-kpi strong {
+      display: block;
+      color: var(--green);
+      font-size: 26px;
+      margin-bottom: 3px;
+    }
+
+    .universe-kpi span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .universe-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+      max-width: 520px;
+    }
+
+    .universe-mode {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 13px;
+      color: var(--text);
+      background: rgba(255, 255, 255, .08);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      transition: .25s ease;
+    }
+
+    .universe-mode.active,
+    .universe-mode:hover {
+      transform: translateY(-2px);
+      border-color: rgba(52, 211, 153, .42);
+      background: linear-gradient(90deg, rgba(52, 211, 153, .18), rgba(250, 204, 21, .14));
+    }
+
+    .universe-node-panel {
+      position: absolute;
+      right: 7%;
+      top: clamp(96px, 15vh, 150px);
+      z-index: 3;
+      width: min(320px, calc(100% - 32px));
+      padding: 16px 18px;
+      border-left: 1px solid rgba(52, 211, 153, .42);
+      background: linear-gradient(90deg, rgba(2, 6, 23, .58), rgba(2, 6, 23, .08));
+      backdrop-filter: blur(16px);
+      pointer-events: none;
+    }
+
+    [data-theme="light"] .universe-node-panel {
+      background: linear-gradient(90deg, rgba(255, 255, 255, .74), rgba(255, 255, 255, .08));
+    }
+
+    .universe-node-panel strong {
+      display: block;
+      color: var(--yellow);
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .universe-node-panel span {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 13px;
+    }
 
     .section-title {
       margin-bottom: 34px;
@@ -843,7 +1259,7 @@
 
     .lab-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      grid-template-columns: minmax(0, 1.12fr) minmax(340px, .88fr);
       gap: 22px;
       align-items: stretch;
     }
@@ -959,6 +1375,383 @@
       background: rgba(255,255,255,.05);
       border: 1px solid var(--border);
       font-size: 13px;
+    }
+
+    .mission-simulator {
+      margin-top: 24px;
+      padding: clamp(20px, 3vw, 30px);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(135deg, rgba(34, 211, 238, 0.10), rgba(244, 114, 182, 0.08)),
+        var(--card);
+      backdrop-filter: blur(22px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .mission-simulator::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, transparent 0 48%, rgba(125, 211, 252, 0.12) 49% 51%, transparent 52%),
+        repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 1px, transparent 1px 16px);
+      opacity: .5;
+      mask-image: linear-gradient(90deg, black, transparent 72%);
+    }
+
+    .mission-header,
+    .mission-layout,
+    .mission-track,
+    .mission-history,
+    .mission-status {
+      position: relative;
+      z-index: 1;
+    }
+
+    .mission-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow-mini {
+      display: inline-flex;
+      margin-bottom: 8px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .mission-header h3 {
+      font-size: clamp(24px, 3vw, 36px);
+      letter-spacing: -0.8px;
+      margin-bottom: 10px;
+    }
+
+    .mission-header p {
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 720px;
+    }
+
+    .mission-launch {
+      border: 0;
+      white-space: nowrap;
+    }
+
+    .mission-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+      width: min(520px, 100%);
+    }
+
+    .mission-actions .btn {
+      min-height: 42px;
+      padding: 10px 13px;
+      font-size: 13px;
+    }
+
+    .mission-layout {
+      display: grid;
+      grid-template-columns: minmax(270px, .72fr) minmax(0, 1.28fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .mission-panel,
+    .mission-output {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(2, 6, 23, 0.30);
+      padding: 18px;
+    }
+
+    .mission-panel {
+      position: sticky;
+      top: 92px;
+    }
+
+    [data-theme="light"] .mission-panel,
+    [data-theme="light"] .mission-output {
+      background: rgba(255, 255, 255, 0.52);
+    }
+
+    .mission-panel label {
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .mission-panel input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 15px;
+      color: var(--text);
+      background: var(--card-2);
+      outline: none;
+      font: inherit;
+    }
+
+    .mission-panel input:focus {
+      border-color: rgba(56, 189, 248, .55);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, .10);
+    }
+
+    .mission-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .mission-chip {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      background: var(--card-2);
+      padding: 9px 12px;
+      cursor: pointer;
+      transition: .25s ease;
+    }
+
+    .mission-chip.active,
+    .mission-chip:hover {
+      color: var(--text);
+      border-color: rgba(125, 211, 252, .38);
+      background: linear-gradient(90deg, rgba(34, 211, 238, .16), rgba(244, 114, 182, .14));
+      transform: translateY(-2px);
+    }
+
+    .mission-history {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .mission-history h4,
+    .mission-card h4 {
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+
+    .mission-history-list {
+      display: grid;
+      gap: 8px;
+      max-height: 168px;
+      overflow: auto;
+    }
+
+    .mission-history-item {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 12px;
+      color: var(--text);
+      background: var(--card-2);
+      cursor: pointer;
+      text-align: left;
+      transition: .2s ease;
+    }
+
+    .mission-history-item:hover {
+      transform: translateY(-2px);
+      background: rgba(34, 211, 238, .12);
+    }
+
+    .mission-history-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .mission-output {
+      display: grid;
+      gap: 14px;
+    }
+
+    .mission-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .mission-stat {
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+    }
+
+    .mission-stat strong {
+      display: block;
+      color: var(--yellow);
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .mission-stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mission-track {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .mission-step {
+      min-height: 96px;
+      border-radius: 18px;
+      border: 1px solid rgba(125, 211, 252, .22);
+      background: rgba(34, 211, 238, .08);
+      padding: 13px;
+      color: var(--muted);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mission-step::after {
+      content: "";
+      position: absolute;
+      inset: auto 12px 10px 12px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+      transform: scaleX(.18);
+      transform-origin: left;
+      transition: .45s ease;
+    }
+
+    .mission-step.active {
+      color: var(--text);
+      background: linear-gradient(135deg, rgba(34,211,238,.18), rgba(244,114,182,.16));
+      box-shadow: 0 0 24px rgba(34, 211, 238, .14);
+    }
+
+    .mission-step.active::after {
+      transform: scaleX(1);
+    }
+
+    .mission-step strong {
+      display: block;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .mission-preview {
+      min-height: 92px;
+      border-radius: 14px;
+      padding: 16px;
+      line-height: 1.75;
+      color: #d1fae5;
+      background: rgba(2, 6, 23, .78);
+      border: 1px solid rgba(52, 211, 153, .20);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      white-space: pre-wrap;
+    }
+
+    [data-theme="light"] .mission-preview {
+      color: #065f46;
+      background: rgba(236, 253, 245, .72);
+    }
+
+    .mission-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mission-card {
+      min-height: 156px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--card-2);
+      padding: 15px;
+    }
+
+    .mission-list,
+    .mission-milestones,
+    .mission-risks {
+      display: grid;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .mission-task,
+    .mission-milestone {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+
+    .mission-task input {
+      margin-top: 4px;
+      accent-color: #22d3ee;
+    }
+
+    .mission-milestone strong {
+      flex: 0 0 auto;
+      color: var(--blue);
+      min-width: 54px;
+    }
+
+    .mission-risk-row {
+      display: grid;
+      grid-template-columns: 72px 1fr 42px;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mission-risk-bar {
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(148, 163, 184, .18);
+    }
+
+    .mission-risk-bar span {
+      display: block;
+      height: 100%;
+      width: var(--risk, 0%);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--pink));
+    }
+
+    .mission-status {
+      min-height: 22px;
+      margin-top: 12px;
+      color: var(--green);
+      font-size: 13px;
+    }
+
+    body.launch-mode .mission-simulator {
+      border-color: rgba(250, 204, 21, .42);
+      box-shadow: 0 0 80px rgba(250, 204, 21, .14), var(--shadow);
+    }
+
+    body.launch-mode .ai-core {
+      animation-duration: 1.2s;
+      box-shadow: 0 0 110px rgba(250, 204, 21, .42);
     }
 
     .overlay {
@@ -1584,6 +2377,8 @@
       text-decoration: none;
       transition: .25s ease;
       box-shadow: 0 18px 60px rgba(2, 6, 23, .12);
+      transform-style: preserve-3d;
+      will-change: transform;
     }
 
     .direction-card:hover {
@@ -1615,11 +2410,19 @@
       font-size: 14px;
     }
 
+    .direction-card > *,
+    .project-card > *,
+    .research-card > *,
+    .process-card > * {
+      transform: translateZ(18px);
+    }
+
     .direction-page {
       padding-top: 54px;
     }
 
     .window-frame {
+      position: relative;
       border: 1px solid var(--border);
       border-radius: 28px;
       overflow: hidden;
@@ -1628,7 +2431,42 @@
       box-shadow: var(--shadow);
     }
 
+    .window-frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, transparent, rgba(34, 211, 238, .12), transparent),
+        repeating-linear-gradient(180deg, transparent 0 9px, rgba(255,255,255,.035) 10px 11px);
+      transform: translateY(-100%);
+      animation: windowScan 5.8s ease-in-out infinite;
+    }
+
+    .window-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(52, 211, 153, .16), transparent 28%);
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+
+    .window-frame:hover::after {
+      opacity: 1;
+    }
+
+    @keyframes windowScan {
+      0%, 42% { transform: translateY(-112%); }
+      58%, 100% { transform: translateY(112%); }
+    }
+
     .window-bar {
+      position: relative;
+      z-index: 2;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -1641,6 +2479,8 @@
     }
 
     .window-body {
+      position: relative;
+      z-index: 2;
       display: grid;
       grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
       gap: 24px;
@@ -1698,10 +2538,35 @@
     }
 
     .process-card {
+      position: relative;
+      overflow: hidden;
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 18px;
       background: rgba(255,255,255,.045);
+      transform-style: preserve-3d;
+      transition: .25s ease;
+    }
+
+    .process-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(var(--cyan), var(--green), var(--pink));
+      box-shadow: 0 0 18px rgba(52, 211, 153, .56);
+      animation: edgePulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes edgePulse {
+      50% { opacity: .35; transform: scaleY(.72); }
+    }
+
+    .process-card:hover {
+      transform: translateY(-5px);
+      background: rgba(52, 211, 153, .08);
     }
 
     .process-card strong {
@@ -1732,9 +2597,62 @@
       color: var(--text);
       text-decoration: none;
       font-size: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .route-strip a::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,.24), transparent);
+      transform: translateX(-120%);
+      animation: routeFlash 3.8s ease-in-out infinite;
+    }
+
+    .route-strip a:nth-child(2)::after { animation-delay: .22s; }
+    .route-strip a:nth-child(3)::after { animation-delay: .44s; }
+    .route-strip a:nth-child(4)::after { animation-delay: .66s; }
+    .route-strip a:nth-child(5)::after { animation-delay: .88s; }
+    .route-strip a:nth-child(6)::after { animation-delay: 1.1s; }
+
+    @keyframes routeFlash {
+      0%, 56% { transform: translateX(-120%); }
+      72%, 100% { transform: translateX(120%); }
+    }
+
+    .dynamic-tilt {
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .parallax-soft {
+      will-change: transform;
+      transform: translate3d(0, var(--parallax-y, 0px), 0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+
+      .data-rain,
+      .cursor-spark,
+      .click-ripple {
+        display: none !important;
+      }
     }
 
     @media (max-width: 980px) {
+      header {
+        display: flex;
+        padding: 12px 6%;
+      }
+
       nav {
         display: none;
       }
@@ -1764,6 +2682,8 @@
       .grid-4,
       .skill-board,
       .lab-grid,
+      .mission-layout,
+      .universe-hud,
       .direction-hub,
       .window-body {
         grid-template-columns: 1fr;
@@ -1775,6 +2695,18 @@
 
       .hero-card {
         padding: 30px 22px;
+      }
+
+      .hero-layout {
+        width: 100%;
+      }
+
+      .hero {
+        place-items: start center;
+      }
+
+      .orbit-panel {
+        transform: none;
       }
 
       .orbit-panel {
@@ -1797,12 +2729,72 @@
         grid-template-columns: repeat(2, 1fr);
       }
 
+      .mission-header {
+        display: grid;
+      }
+
+      .mission-actions {
+        justify-content: flex-start;
+        width: 100%;
+      }
+
+      .mission-panel {
+        position: relative;
+        top: auto;
+      }
+
+      .mission-track {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .universe-shell {
+        min-height: auto;
+        align-content: end;
+        padding: 250px 6% 64px;
+      }
+
+      .universe-controls {
+        justify-content: flex-start;
+      }
+
+      .universe-node-panel {
+        top: 92px;
+        right: 16px;
+        width: min(360px, calc(100% - 32px));
+      }
+
       section {
         padding: 72px 6%;
+      }
+
+      .universe-3d {
+        padding: 0;
       }
     }
 
     @media (max-width: 560px) {
+      html {
+        scroll-padding-top: 72px;
+      }
+
+      header {
+        gap: 8px;
+      }
+
+      .logo-text {
+        font-size: 14px;
+      }
+
+      .logo-mark {
+        width: 30px;
+        height: 30px;
+        border-radius: 12px;
+      }
+
+      .hero {
+        padding-top: 32px;
+      }
+
       .metric-grid {
         grid-template-columns: 1fr;
       }
@@ -1815,6 +2807,53 @@
         display: none;
       }
 
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .mission-actions .btn,
+      .universe-mode {
+        width: auto;
+      }
+
+      .mission-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .mission-actions .mission-launch {
+        grid-column: 1 / -1;
+      }
+
+      .universe-3d,
+      .universe-shell {
+        min-height: 100svh;
+      }
+
+      .universe-shell {
+        padding: 230px 6% 44px;
+      }
+
+      .universe-copy h2 {
+        font-size: clamp(34px, 12vw, 48px);
+      }
+
+      .universe-copy p {
+        font-size: 14px;
+      }
+
+      .universe-node-panel {
+        top: 78px;
+        left: 16px;
+        right: 16px;
+      }
+
+      .universe-controls {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .contact-box {
         padding: 32px 20px;
       }
@@ -1823,13 +2862,47 @@
         display: none;
       }
 
+      .director-trigger {
+        display: none;
+      }
+
       .theme-option {
         padding: 8px;
         font-size: 12px;
       }
 
+      .director-hud {
+        left: 16px;
+        right: 16px;
+        top: 76px;
+        width: auto;
+      }
+
+      .director-dock {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        transform: none;
+        border-radius: 20px;
+      }
+
+      .director-dock button {
+        min-width: 0;
+        padding: 0 8px;
+      }
+
+      .director-rail {
+        display: none;
+      }
+
       .pipeline,
       .cockpit-kpis,
+      .mission-stats,
+      .mission-track,
+      .mission-detail-grid,
+      .universe-kpis,
       .direction-stats {
         grid-template-columns: 1fr;
       }
@@ -1846,6 +2919,22 @@
   <div class="noise"></div>
   <div class="mouse-light" id="mouseLight"></div>
   <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="data-rain" id="dataRain" aria-hidden="true"></div>
+  <div class="director-hud" id="directorHud" aria-live="polite">
+    <small id="directorKicker">Showcase Director</small>
+    <strong id="directorTitle">AI Research Portfolio</strong>
+    <p id="directorText">点击“自动演示”，页面会按作品集叙事顺序巡航：开场、3D 宇宙、方向地图、项目、实验室和联系入口。</p>
+    <div class="director-progress"><span id="directorProgress"></span></div>
+  </div>
+  <div class="director-rail" id="directorRail" aria-label="章节导航"></div>
+  <div class="director-dock" id="directorDock" aria-label="演示导演控制台">
+    <button type="button" data-director-action="tour">自动演示</button>
+    <button type="button" data-director-action="focus">聚焦</button>
+    <button type="button" data-director-action="universe">3D</button>
+    <button type="button" data-director-action="mission">Mission</button>
+    <button type="button" data-director-action="bot">K-Bot</button>
+    <button type="button" data-director-action="top">Top</button>
+  </div>
 
   <header>
     <a class="logo" href="#home" aria-label="返回首页">
@@ -1855,6 +2944,7 @@
 
     <nav id="nav">
       <a href="#home">首页</a>
+      <a href="#universe3d">3D</a>
       <a href="#profile">档案</a>
       <a href="#direction-hub">方向页</a>
       <a href="#research">研究</a>
@@ -1870,6 +2960,7 @@
         <button class="theme-option active" type="button" data-theme-option="dark">🌙 黑夜</button>
         <button class="theme-option" type="button" data-theme-option="light">☀️ 白天</button>
       </div>
+      <button class="icon-btn director-trigger" type="button" data-director-action="tour">演示模式</button>
       <button class="icon-btn command-trigger" type="button" data-open-command title="打开命令面板">⌘K</button>
       <a class="icon-btn" href="https://github.com/kioyurt/" target="_blank" rel="noopener noreferrer" title="打开 GitHub 主页">GitHub 主页 ↗</a>
       <button class="icon-btn mobile-toggle" id="mobileToggle" type="button" aria-label="打开导航">☰</button>
@@ -1896,6 +2987,8 @@
 
         <div class="btn-row">
           <a class="btn" href="#direction-hub">进入方向窗口 →</a>
+          <a class="btn secondary" href="#universe3d">打开 3D 宇宙</a>
+          <button class="btn secondary" type="button" data-director-action="tour">一键演示</button>
           <a class="btn secondary" href="#research">研究地图</a>
           <a class="btn secondary" href="#projects">查看项目</a>
           <a class="btn secondary" href="mailto:456456780qwe@gmail.com">联系我</a>
@@ -1931,6 +3024,35 @@
         <div class="node n3">具身智能</div>
         <div class="node n4">世界模型</div>
         <div class="node n5">脑机接口</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="universe3d" class="universe-3d reveal" aria-label="3D Research Universe">
+    <canvas id="researchUniverse3d"></canvas>
+    <div class="universe-node-panel" aria-live="polite">
+      <strong id="universeFocusTitle">Multimodal Core</strong>
+      <span id="universeFocusText">多模态、量化、具身智能、世界模型和脑机接口被组织成一个可旋转的 3D 研究网络。</span>
+    </div>
+    <div class="universe-shell">
+      <div class="universe-copy">
+        <div class="eyebrow">3D Research Universe</div>
+        <h2>把研究方向变成可旋转的 <span class="gradient-text">空间网络</span></h2>
+        <p>这个场景会随鼠标、滚动和 Cockpit 指标变化。节点不是装饰：它们对应页面里的研究方向、项目和任务模拟器，可以作为个人主页的视觉入口。</p>
+      </div>
+      <div class="universe-hud">
+        <div class="universe-kpis">
+          <div class="universe-kpi"><strong id="universeNodes">7</strong><span>空间节点</span></div>
+          <div class="universe-kpi"><strong id="universeEnergy">78</strong><span>系统能量</span></div>
+          <div class="universe-kpi"><strong id="universeMode">探索</strong><span>当前模式</span></div>
+        </div>
+        <div class="universe-controls" aria-label="切换 3D 研究模式">
+          <button class="universe-mode active" type="button" data-universe-mode="explore">探索</button>
+          <button class="universe-mode" type="button" data-universe-mode="research">研究</button>
+          <button class="universe-mode" type="button" data-universe-mode="product">产品</button>
+          <button class="universe-mode" type="button" data-universe-mode="quant">量化</button>
+          <button class="universe-mode" type="button" data-universe-mode="embodied">具身</button>
+        </div>
       </div>
     </div>
   </section>
@@ -2475,6 +3597,78 @@
           <div class="activity-feed" id="activityFeed"></div>
         </div>
       </div>
+
+      <div class="mission-simulator" id="missionSimulator" aria-label="AI 任务模拟器">
+        <div class="mission-header">
+          <div>
+            <span class="eyebrow-mini">Mission Simulator</span>
+            <h3>把一个想法压缩成可执行 Demo</h3>
+            <p>输入一个研究或产品目标，或直接选择预设任务。页面会根据 Cockpit 的数据质量、模型能力和工程成熟度，动态生成行动路线、风险级别和演示状态。</p>
+          </div>
+          <div class="mission-actions">
+            <button class="btn mission-launch" id="missionLaunch" type="button">启动模拟 →</button>
+            <button class="btn secondary" id="missionSave" type="button">保存方案</button>
+            <button class="btn secondary" id="missionCopy" type="button">复制摘要</button>
+            <button class="btn secondary" id="missionSend" type="button">发送终端</button>
+            <button class="btn secondary" id="missionExport" type="button">导出 JSON</button>
+          </div>
+        </div>
+
+        <div class="mission-layout">
+          <div class="mission-panel">
+            <label for="missionInput">
+              <span>当前目标</span>
+              <input id="missionInput" type="text" value="构建一个多模态研究助手 Demo" />
+            </label>
+            <div class="mission-chips" aria-label="选择任务模板">
+              <button class="mission-chip active" type="button" data-mission="构建一个多模态研究助手 Demo">多模态助手</button>
+              <button class="mission-chip" type="button" data-mission="搭建量化策略回测 Dashboard">量化 Dashboard</button>
+              <button class="mission-chip" type="button" data-mission="制作世界模型可视化原型">世界模型原型</button>
+              <button class="mission-chip" type="button" data-mission="设计具身智能任务规划台">具身规划台</button>
+              <button class="mission-chip" type="button" data-mission="沉淀脑机接口论文知识库">BCI 知识库</button>
+            </div>
+            <div class="mission-history">
+              <h4>历史方案</h4>
+              <div class="mission-history-list" id="missionHistory"></div>
+            </div>
+          </div>
+
+          <div class="mission-output">
+            <div class="mission-stats">
+              <div class="mission-stat"><strong id="missionSpeed">72%</strong><span>落地速度</span></div>
+              <div class="mission-stat"><strong id="missionRisk">中</strong><span>风险等级</span></div>
+              <div class="mission-stat"><strong id="missionImpact">A</strong><span>展示价值</span></div>
+            </div>
+            <div class="mission-preview" id="missionPreview"></div>
+            <div class="mission-detail-grid">
+              <div class="mission-card">
+                <h4>任务清单</h4>
+                <div class="mission-list" id="missionTasks"></div>
+              </div>
+              <div class="mission-card">
+                <h4>里程碑</h4>
+                <div class="mission-milestones" id="missionMilestones"></div>
+              </div>
+              <div class="mission-card">
+                <h4>风险雷达</h4>
+                <div class="mission-risks" id="missionRisks"></div>
+              </div>
+              <div class="mission-card">
+                <h4>执行建议</h4>
+                <div class="mission-preview" id="missionAdvice"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission-track" id="missionTrack" aria-label="任务执行路线">
+          <div class="mission-step active"><strong>01 目标</strong><span>锁定应用场景与核心用户价值。</span></div>
+          <div class="mission-step active"><strong>02 数据</strong><span>整理输入源、标注方式和评估样例。</span></div>
+          <div class="mission-step active"><strong>03 原型</strong><span>用最小链路连接模型、界面和结果展示。</span></div>
+          <div class="mission-step"><strong>04 发布</strong><span>打磨交互、补充说明并准备线上展示。</span></div>
+        </div>
+        <div class="mission-status" id="missionStatus" role="status"></div>
+      </div>
     </div>
   </section>
 
@@ -2530,7 +3724,7 @@
         如果你对多模态、具身智能、世界模型、量化研究、AI 应用或全栈开发感兴趣，欢迎通过 GitHub 或邮件联系我。
       </p>
       <div class="btn-row" style="justify-content:center; margin-bottom:0;">
-        <a class="btn" href="https://github.com/kioyurt" target="_blank">GitHub</a>
+        <a class="btn" href="https://github.com/kioyurt" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a class="btn secondary" href="mailto:456456780qwe@gmail.com">Email</a>
         <a class="btn secondary" href="#home">返回顶部</a>
       </div>
@@ -2720,6 +3914,272 @@
       drawNetwork();
     }
 
+    const universeCanvas = document.getElementById("researchUniverse3d");
+    const universeCtx = universeCanvas ? universeCanvas.getContext("2d") : null;
+    const universeFocusTitle = document.getElementById("universeFocusTitle");
+    const universeFocusText = document.getElementById("universeFocusText");
+    const universeEnergy = document.getElementById("universeEnergy");
+    const universeModeLabel = document.getElementById("universeMode");
+    const universeModeButtons = [...document.querySelectorAll(".universe-mode")];
+    const universeReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const universeNodes = [
+      { id: "core", label: "Multimodal Core", zh: "多模态核心", text: "图像、文本、数据和任务语义在这里汇合，形成页面的研究中枢。", color: "#22d3ee", x: 0, y: 0, z: 0 },
+      { id: "quant", label: "Quant Lab", zh: "量化研究", text: "市场数据、因子、回测和风险控制构成严谨的数据实验链路。", color: "#facc15", x: 230, y: -60, z: 180 },
+      { id: "world", label: "World Model", zh: "世界模型", text: "内部模拟、状态预测和轨迹规划把智能体的未来推理可视化。", color: "#34d399", x: -230, y: -90, z: 150 },
+      { id: "embodied", label: "Embodied AI", zh: "具身智能", text: "感知、规划、控制和反馈组成智能体与环境互动的闭环。", color: "#f472b6", x: 260, y: 140, z: -120 },
+      { id: "bci", label: "BCI", zh: "脑机接口", text: "神经信号、认知状态和智能系统之间的接口让人机融合成为研究方向。", color: "#a78bfa", x: -250, y: 120, z: -140 },
+      { id: "agent", label: "Agent Stack", zh: "智能体工程", text: "工具调用、记忆、任务拆解和反馈机制让研究想法变成可执行系统。", color: "#fb7185", x: 40, y: -230, z: -70 },
+      { id: "product", label: "Demo Ship", zh: "产品化 Demo", text: "前端交互、后端 API 和实验记录把模型能力包装成可展示体验。", color: "#60a5fa", x: -20, y: 230, z: 90 }
+    ];
+
+    const universeLinks = [
+      ["core", "quant"], ["core", "world"], ["core", "embodied"], ["core", "bci"], ["core", "agent"], ["core", "product"],
+      ["world", "embodied"], ["agent", "product"], ["quant", "product"], ["bci", "agent"], ["world", "agent"]
+    ];
+
+    const universeModes = {
+      explore: { label: "探索", focus: "core", rx: -0.12, ry: 0.42, speed: 0.0034 },
+      research: { label: "研究", focus: "world", rx: -0.22, ry: -0.30, speed: 0.0024 },
+      product: { label: "产品", focus: "product", rx: 0.16, ry: 0.12, speed: 0.0030 },
+      quant: { label: "量化", focus: "quant", rx: -0.08, ry: 0.84, speed: 0.0028 },
+      embodied: { label: "具身", focus: "embodied", rx: 0.24, ry: 0.56, speed: 0.0032 }
+    };
+
+    const universeState = {
+      width: 0,
+      height: 0,
+      rx: -0.12,
+      ry: 0.42,
+      targetRx: -0.12,
+      targetRy: 0.42,
+      mode: "explore",
+      focusId: "core",
+      projected: []
+    };
+
+    function getUniverseReadiness() {
+      const signal = Number(document.getElementById("signalRange")?.value || 78);
+      const model = Number(document.getElementById("modelRange")?.value || 82);
+      const system = Number(document.getElementById("systemRange")?.value || 74);
+      return Math.round(signal * 0.32 + model * 0.38 + system * 0.30);
+    }
+
+    function resizeUniverse() {
+      if (!universeCanvas || !universeCtx) return;
+      const rect = universeCanvas.getBoundingClientRect();
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      universeCanvas.width = Math.max(320, Math.floor(rect.width * dpr));
+      universeCanvas.height = Math.max(420, Math.floor(rect.height * dpr));
+      universeCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      universeState.width = rect.width;
+      universeState.height = rect.height;
+    }
+
+    function rotateUniversePoint(point, rx, ry) {
+      const cosY = Math.cos(ry);
+      const sinY = Math.sin(ry);
+      const cosX = Math.cos(rx);
+      const sinX = Math.sin(rx);
+      const x1 = point.x * cosY - point.z * sinY;
+      const z1 = point.x * sinY + point.z * cosY;
+      const y1 = point.y * cosX - z1 * sinX;
+      const z2 = point.y * sinX + z1 * cosX;
+      return { x: x1, y: y1, z: z2 };
+    }
+
+    function projectUniversePoint(node) {
+      const rotated = rotateUniversePoint(node, universeState.rx, universeState.ry);
+      const scaleBase = Math.min(universeState.width, universeState.height) / 720;
+      const perspective = 820 / (820 + rotated.z);
+      return {
+        ...node,
+        rx: rotated.x,
+        ry: rotated.y,
+        rz: rotated.z,
+        x2: universeState.width / 2 + rotated.x * perspective * scaleBase,
+        y2: universeState.height / 2 + rotated.y * perspective * scaleBase,
+        radius: (16 + (node.id === universeState.focusId ? 11 : 0)) * perspective,
+        alpha: Math.max(.34, Math.min(1, .58 + rotated.z / 560)),
+        perspective
+      };
+    }
+
+    function drawUniverseRings(centerX, centerY, size, energy) {
+      if (!universeCtx) return;
+      const rings = [
+        { rotate: universeState.ry, color: `rgba(34, 211, 238, ${0.12 + energy * .0011})` },
+        { rotate: universeState.ry + Math.PI / 3, color: `rgba(52, 211, 153, ${0.10 + energy * .0010})` },
+        { rotate: universeState.ry - Math.PI / 4, color: `rgba(250, 204, 21, ${0.09 + energy * .0008})` }
+      ];
+      rings.forEach((ring, index) => {
+        universeCtx.save();
+        universeCtx.translate(centerX, centerY);
+        universeCtx.rotate(ring.rotate);
+        universeCtx.strokeStyle = ring.color;
+        universeCtx.lineWidth = index === 0 ? 1.6 : 1;
+        universeCtx.setLineDash(index === 1 ? [8, 12] : []);
+        universeCtx.beginPath();
+        universeCtx.ellipse(0, 0, size * (1 + index * .23), size * (.34 + index * .06), 0, 0, Math.PI * 2);
+        universeCtx.stroke();
+        universeCtx.restore();
+      });
+    }
+
+    function hexToRgba(hex, alpha) {
+      const value = hex.replace("#", "");
+      const r = parseInt(value.slice(0, 2), 16);
+      const g = parseInt(value.slice(2, 4), 16);
+      const b = parseInt(value.slice(4, 6), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    function drawUniverseFrame() {
+      if (!universeCanvas || !universeCtx) return;
+      const w = universeState.width;
+      const h = universeState.height;
+      if (!w || !h) {
+        requestAnimationFrame(drawUniverseFrame);
+        return;
+      }
+
+      const mode = universeModes[universeState.mode] || universeModes.explore;
+      const energy = getUniverseReadiness();
+      if (!universeReducedMotion) {
+        universeState.targetRy += mode.speed * (0.55 + energy / 140);
+      }
+      universeState.rx += (universeState.targetRx - universeState.rx) * .055;
+      universeState.ry += (universeState.targetRy - universeState.ry) * .055;
+
+      universeCtx.clearRect(0, 0, w, h);
+      const bg = universeCtx.createRadialGradient(w * .52, h * .44, 30, w * .52, h * .44, Math.max(w, h) * .7);
+      bg.addColorStop(0, document.body.dataset.theme === "light" ? "rgba(255,255,255,.18)" : "rgba(34,211,238,.16)");
+      bg.addColorStop(.52, "rgba(15,23,42,.06)");
+      bg.addColorStop(1, "rgba(2,6,23,0)");
+      universeCtx.fillStyle = bg;
+      universeCtx.fillRect(0, 0, w, h);
+
+      drawUniverseRings(w / 2, h / 2, Math.min(w, h) * .25, energy);
+
+      const projected = universeNodes.map(projectUniversePoint).sort((a, b) => a.rz - b.rz);
+      universeState.projected = projected;
+      const byId = new Map(projected.map(node => [node.id, node]));
+
+      universeLinks.forEach(([from, to]) => {
+        const a = byId.get(from);
+        const b = byId.get(to);
+        if (!a || !b) return;
+        const focusBoost = a.id === universeState.focusId || b.id === universeState.focusId ? .28 : 0;
+        const alpha = Math.max(.08, Math.min(.48, ((a.alpha + b.alpha) / 2) * .26 + focusBoost));
+        const gradient = universeCtx.createLinearGradient(a.x2, a.y2, b.x2, b.y2);
+        gradient.addColorStop(0, hexToRgba(a.color, alpha));
+        gradient.addColorStop(1, hexToRgba(b.color, alpha));
+        universeCtx.strokeStyle = gradient;
+        universeCtx.lineWidth = 1 + focusBoost * 3;
+        universeCtx.beginPath();
+        universeCtx.moveTo(a.x2, a.y2);
+        universeCtx.lineTo(b.x2, b.y2);
+        universeCtx.stroke();
+      });
+
+      projected.forEach(node => {
+        const pulse = node.id === universeState.focusId ? Math.sin(performance.now() / 220) * 3 : 0;
+        const radius = node.radius + pulse;
+        universeCtx.save();
+        universeCtx.globalAlpha = node.alpha;
+        universeCtx.shadowColor = node.color;
+        universeCtx.shadowBlur = node.id === universeState.focusId ? 36 : 18;
+        universeCtx.fillStyle = node.color;
+        universeCtx.beginPath();
+        universeCtx.arc(node.x2, node.y2, radius, 0, Math.PI * 2);
+        universeCtx.fill();
+        universeCtx.shadowBlur = 0;
+        universeCtx.lineWidth = 1.4;
+        universeCtx.strokeStyle = "rgba(255,255,255,.68)";
+        universeCtx.stroke();
+        universeCtx.globalAlpha = Math.min(1, node.alpha + .16);
+        universeCtx.fillStyle = document.body.dataset.theme === "light" ? "#0f172a" : "#f8fafc";
+        universeCtx.font = `${Math.max(11, 13 * node.perspective)}px Microsoft YaHei, Arial`;
+        universeCtx.textAlign = "center";
+        universeCtx.fillText(node.zh, node.x2, node.y2 + radius + 18);
+        universeCtx.restore();
+      });
+
+      if (universeEnergy) universeEnergy.textContent = energy;
+      requestAnimationFrame(drawUniverseFrame);
+    }
+
+    function updateUniverseFocus(nodeId) {
+      const node = universeNodes.find(item => item.id === nodeId) || universeNodes[0];
+      universeState.focusId = node.id;
+      if (universeFocusTitle) universeFocusTitle.textContent = node.label;
+      if (universeFocusText) universeFocusText.textContent = node.text;
+    }
+
+    function setUniverseMode(modeName) {
+      const mode = universeModes[modeName] || universeModes.explore;
+      universeState.mode = modeName in universeModes ? modeName : "explore";
+      universeState.targetRx = mode.rx;
+      universeState.targetRy = mode.ry;
+      updateUniverseFocus(mode.focus);
+      if (universeModeLabel) universeModeLabel.textContent = mode.label;
+      universeModeButtons.forEach(button => {
+        button.classList.toggle("active", button.dataset.universeMode === universeState.mode);
+      });
+    }
+
+    function probeUniverseCanvas() {
+      if (!universeCanvas || !universeCtx) return;
+      try {
+        const w = universeCanvas.width;
+        const h = universeCanvas.height;
+        const data = universeCtx.getImageData(0, 0, w, h).data;
+        let lit = 0;
+        const colors = new Set();
+        const step = Math.max(4, Math.floor(data.length / 4800 / 4) * 4);
+        for (let i = 0; i < data.length; i += step) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const a = data[i + 3];
+          if (a > 0 && r + g + b > 42) lit++;
+          colors.add(`${r >> 4},${g >> 4},${b >> 4},${a >> 5}`);
+        }
+        document.body.dataset.universeRender = `${lit}:${colors.size}:${w}x${h}`;
+      } catch (error) {
+        document.body.dataset.universeRender = "blocked";
+      }
+    }
+
+    if (universeCanvas && universeCtx) {
+      window.addEventListener("resize", resizeUniverse);
+      universeCanvas.addEventListener("pointermove", event => {
+        const rect = universeCanvas.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - .5;
+        const y = (event.clientY - rect.top) / rect.height - .5;
+        universeState.targetRy += x * .08;
+        universeState.targetRx = Math.max(-.72, Math.min(.72, universeState.targetRx + y * .05));
+      }, { passive: true });
+      universeCanvas.addEventListener("click", event => {
+        const rect = universeCanvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const nearest = universeState.projected
+          .map(node => ({ node, dist: Math.hypot(node.x2 - x, node.y2 - y) }))
+          .sort((a, b) => a.dist - b.dist)[0];
+        if (nearest && nearest.dist < 64) updateUniverseFocus(nearest.node.id);
+      });
+      universeModeButtons.forEach(button => {
+        button.addEventListener("click", () => setUniverseMode(button.dataset.universeMode));
+      });
+      resizeUniverse();
+      setUniverseMode("explore");
+      drawUniverseFrame();
+      if (new URLSearchParams(window.location.search).has("verify3d")) {
+        setTimeout(probeUniverseCanvas, 1200);
+      }
+    }
+
     const reveals = document.querySelectorAll(".reveal");
     const navLinks = document.querySelectorAll("nav a");
     const sections = [...document.querySelectorAll("section[id]")];
@@ -2751,6 +4211,151 @@
 
     window.addEventListener("scroll", onScroll);
     onScroll();
+
+    function getHashTarget() {
+      const rawHash = window.location.hash;
+      if (!rawHash || rawHash.length > 80) return null;
+      try {
+        const id = decodeURIComponent(rawHash.slice(1));
+        if (!/^[A-Za-z][\w-]*$/.test(id)) return null;
+        return document.getElementById(id);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    if (window.location.hash) {
+      requestAnimationFrame(() => {
+        getHashTarget()?.scrollIntoView({ block: "start" });
+      });
+    }
+
+    const directorHud = document.getElementById("directorHud");
+    const directorKicker = document.getElementById("directorKicker");
+    const directorTitle = document.getElementById("directorTitle");
+    const directorText = document.getElementById("directorText");
+    const directorProgress = document.getElementById("directorProgress");
+    const directorRail = document.getElementById("directorRail");
+    const directorDock = document.getElementById("directorDock");
+    const directorTourButtons = [...document.querySelectorAll("[data-director-action='tour']")];
+    const directorChapters = [
+      { id: "home", kicker: "Chapter 01", title: "开场：研究者与工程师身份", text: "先建立人物定位：AI 研究生、量化实习、全栈构建能力同时在线。" },
+      { id: "universe3d", kicker: "Chapter 02", title: "3D Research Universe", text: "用可旋转的空间网络，把研究方向从列表变成一眼能理解的系统地图。", mode: "explore" },
+      { id: "direction-hub", kicker: "Chapter 03", title: "方向窗口：六条主线", text: "多模态、量化、全栈、具身、世界模型和脑机接口共同组成研究路线。" },
+      { id: "projects", kicker: "Chapter 04", title: "项目展示：从想法到 Demo", text: "项目区体现把研究问题产品化、工程化和可视化的能力。" },
+      { id: "lab", kicker: "Chapter 05", title: "实验室：Mission Simulator", text: "这里把目标拆成任务清单、里程碑、风险雷达和可导出的执行方案。" },
+      { id: "contact", kicker: "Chapter 06", title: "收束：联系与延展", text: "最后把页面从展示闭环到行动入口：GitHub、邮箱和后续项目链接。" }
+    ];
+    let directorTimer = null;
+    let directorIndex = 0;
+
+    function renderDirectorRail() {
+      if (!directorRail) return;
+      directorRail.innerHTML = "";
+      directorChapters.forEach((chapter, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.title = chapter.title;
+        button.addEventListener("click", () => {
+          stopDirectorTour(false);
+          goDirectorChapter(index, true);
+        });
+        directorRail.appendChild(button);
+      });
+    }
+
+    function updateDirectorHud(index) {
+      const chapter = directorChapters[index] || directorChapters[0];
+      directorIndex = index;
+      if (directorKicker) directorKicker.textContent = chapter.kicker;
+      if (directorTitle) directorTitle.textContent = chapter.title;
+      if (directorText) directorText.textContent = chapter.text;
+      if (directorProgress) {
+        directorProgress.style.setProperty("--director-progress", `${((index + 1) / directorChapters.length) * 100}%`);
+      }
+      directorRail?.querySelectorAll("button").forEach((button, buttonIndex) => {
+        button.classList.toggle("active", buttonIndex === index);
+      });
+    }
+
+    function goDirectorChapter(index, activate = false) {
+      const safeIndex = (index + directorChapters.length) % directorChapters.length;
+      const chapter = directorChapters[safeIndex];
+      if (!chapter) return;
+      if (activate) document.body.classList.add("director-mode");
+      updateDirectorHud(safeIndex);
+      document.getElementById(chapter.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (chapter.mode) setUniverseMode(chapter.mode);
+      if (chapter.id === "lab") updateMissionSimulator(true);
+      if (chapter.id === "universe3d") setUniverseMode("explore");
+    }
+
+    function stopDirectorTour(leaveMode = true) {
+      if (directorTimer) clearInterval(directorTimer);
+      directorTimer = null;
+      directorTourButtons.forEach(button => button.classList.remove("active"));
+      directorDock?.querySelector("[data-director-action='tour']")?.classList.remove("active");
+      if (leaveMode) document.body.classList.remove("director-mode");
+    }
+
+    function startDirectorTour() {
+      document.body.classList.add("director-mode");
+      directorTourButtons.forEach(button => button.classList.add("active"));
+      directorDock?.querySelector("[data-director-action='tour']")?.classList.add("active");
+      goDirectorChapter(directorIndex, true);
+      if (directorTimer) clearInterval(directorTimer);
+      directorTimer = setInterval(() => {
+        const next = (directorIndex + 1) % directorChapters.length;
+        goDirectorChapter(next, true);
+        if (next === 0) stopDirectorTour(false);
+      }, 5200);
+    }
+
+    function toggleDirectorTour() {
+      if (directorTimer) {
+        stopDirectorTour(true);
+      } else {
+        startDirectorTour();
+      }
+    }
+
+    function handleDirectorAction(action) {
+      if (action === "tour") toggleDirectorTour();
+      if (action === "focus") {
+        document.body.classList.toggle("focus-mode");
+        document.body.classList.add("director-mode");
+      }
+      if (action === "universe") {
+        stopDirectorTour(false);
+        goDirectorChapter(1, true);
+      }
+      if (action === "mission") {
+        stopDirectorTour(false);
+        goDirectorChapter(4, true);
+      }
+      if (action === "bot") {
+        document.body.classList.add("director-mode");
+        openRobotChat();
+      }
+      if (action === "top") {
+        stopDirectorTour(true);
+        document.getElementById("home")?.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    document.querySelectorAll("[data-director-action]").forEach(button => {
+      button.addEventListener("click", () => handleDirectorAction(button.dataset.directorAction));
+    });
+
+    window.addEventListener("keydown", event => {
+      if (event.key.toLowerCase() === "d" && event.shiftKey) {
+        event.preventDefault();
+        toggleDirectorTour();
+      }
+    });
+
+    renderDirectorRail();
+    updateDirectorHud(0);
 
     const mobileToggle = document.getElementById("mobileToggle");
     if (mobileToggle) {
@@ -2874,6 +4479,8 @@
     const commandResults = document.getElementById("commandResults");
     const commandEntries = [
       { title: "首页", hint: "返回 Hero 与核心简介", target: "#home" },
+      { title: "演示导演模式", hint: "自动巡航页面核心章节", action: () => startDirectorTour() },
+      { title: "3D 研究宇宙", hint: "打开可旋转的空间研究网络", target: "#universe3d", action: () => setUniverseMode("explore") },
       { title: "方向页总览", hint: "打开 6 个研究与工程方向窗口", target: "#direction-hub" },
       { title: "多模态智能页", hint: "感知、对齐、推理与论文体系", target: "#direction-multimodal" },
       { title: "量化研究页", hint: "因子、回测、风控与数据管线", target: "#direction-quant" },
@@ -2885,6 +4492,7 @@
       { title: "能力栈", hint: "技能面板与技术关键词", target: "#skills" },
       { title: "项目展示", hint: "筛选项目并打开详情", target: "#projects" },
       { title: "研究终端", hint: "运行交互命令和控制台", target: "#lab" },
+      { title: "任务模拟器", hint: "把想法拆成可执行 Demo 路线", target: "#lab", action: () => updateMissionSimulator(true) },
       { title: "成长轨迹", hint: "学习、实习与构建路线", target: "#timeline" },
       { title: "联系", hint: "GitHub 与邮箱入口", target: "#contact" },
       { title: "打开 K-Bot", hint: "启动右下角 AI 助手", action: () => openRobotChat() },
@@ -2898,11 +4506,20 @@
       commandOverlay.setAttribute("aria-hidden", "true");
     }
 
+    function scrollToSafeTarget(target, behavior = "smooth") {
+      const id = String(target || "").startsWith("#") ? String(target).slice(1) : "";
+      if (!/^[A-Za-z][\w-]*$/.test(id)) return false;
+      const element = document.getElementById(id);
+      if (!element) return false;
+      element.scrollIntoView({ behavior });
+      return true;
+    }
+
     function runCommand(entry) {
       if (!entry) return;
       closeCommandPalette();
       if (entry.target) {
-        document.querySelector(entry.target)?.scrollIntoView({ behavior: "smooth" });
+        scrollToSafeTarget(entry.target);
       }
       if (entry.action) entry.action();
     }
@@ -2919,7 +4536,11 @@
         const button = document.createElement("button");
         button.className = `command-item${index === 0 ? " active" : ""}`;
         button.type = "button";
-        button.innerHTML = `<strong>${entry.title}</strong><span>${entry.hint}</span>`;
+        const title = document.createElement("strong");
+        const hint = document.createElement("span");
+        title.textContent = entry.title;
+        hint.textContent = entry.hint;
+        button.append(title, hint);
         button.addEventListener("click", () => runCommand(entry));
         commandResults.appendChild(button);
       });
@@ -3062,11 +4683,18 @@
       document.getElementById("iterationScore").textContent = iterations;
       if (activityFeed) {
         const mode = readiness >= 82 ? "系统可以进入展示级 Demo" : readiness >= 68 ? "适合继续打磨原型" : "需要优先补齐数据和工程链路";
-        activityFeed.innerHTML = [
+        const items = [
           `状态评估：${mode}`,
           `建议重点：${signal < model ? "提升数据质量与标注一致性" : "增强模型评估和误差分析"}`,
           `工程节奏：保留 ${iterations} 轮小步迭代窗口`
-        ].map(text => `<div class="activity-item">${text}</div>`).join("");
+        ];
+        activityFeed.innerHTML = "";
+        items.forEach(text => {
+          const item = document.createElement("div");
+          item.className = "activity-item";
+          item.textContent = text;
+          activityFeed.appendChild(item);
+        });
       }
     }
 
@@ -3074,6 +4702,419 @@
       if (input) input.addEventListener("input", updateCockpit);
     });
     updateCockpit();
+
+    const missionInput = document.getElementById("missionInput");
+    const missionLaunch = document.getElementById("missionLaunch");
+    const missionSave = document.getElementById("missionSave");
+    const missionCopy = document.getElementById("missionCopy");
+    const missionSend = document.getElementById("missionSend");
+    const missionExport = document.getElementById("missionExport");
+    const missionPreview = document.getElementById("missionPreview");
+    const missionSpeed = document.getElementById("missionSpeed");
+    const missionRisk = document.getElementById("missionRisk");
+    const missionImpact = document.getElementById("missionImpact");
+    const missionTasks = document.getElementById("missionTasks");
+    const missionMilestones = document.getElementById("missionMilestones");
+    const missionRisks = document.getElementById("missionRisks");
+    const missionAdvice = document.getElementById("missionAdvice");
+    const missionHistory = document.getElementById("missionHistory");
+    const missionStatus = document.getElementById("missionStatus");
+    const missionSteps = [...document.querySelectorAll(".mission-step")];
+    const missionChips = [...document.querySelectorAll(".mission-chip")];
+    const missionHistoryKey = "kioyurt-mission-history";
+    let currentMissionPlan = null;
+
+    const missionTemplates = [
+      {
+        match: ["量化", "交易", "回测", "因子", "dashboard"],
+        stack: "market-data -> factor-engine -> backtest -> risk-panel",
+        focus: "先保证数据清洗、因子口径和收益风险指标一致，再把回测结果做成可解释视图。",
+        impact: "A+",
+        tasks: ["确定数据字段、频率和复权口径", "实现因子计算与缺失值处理", "跑通回测、换手和回撤评估", "设计收益曲线与风险解释面板"],
+        milestones: ["数据样本可复现", "策略指标可对比", "Dashboard 可演示"],
+        advice: "先用小样本验证因子方向，再扩大到完整时间窗。所有收益指标都要和风险指标一起展示。"
+      },
+      {
+        match: ["世界模型", "world", "轨迹", "规划", "预测"],
+        stack: "state-encoder -> rollout-simulator -> planner -> trajectory-ui",
+        focus: "把抽象的状态预测拆成可见轨迹，让用户能看到模型如何模拟未来并选择动作。",
+        impact: "S",
+        tasks: ["定义状态、动作和奖励的最小集合", "制作未来轨迹采样与评分视图", "加入多条候选路径对比", "用动画展示规划过程和选择理由"],
+        milestones: ["状态空间明确", "预测轨迹可视化", "规划 Demo 可交互"],
+        advice: "不要一开始追求复杂物理环境，先做一个可解释的二维状态空间，把预测和选择过程讲清楚。"
+      },
+      {
+        match: ["具身", "机器人", "embodied", "任务规划"],
+        stack: "perception -> affordance -> planner -> feedback-loop",
+        focus: "用任务卡片和环境状态串起感知、规划、控制与反馈，突出闭环能力。",
+        impact: "S",
+        tasks: ["列出环境对象、可执行动作和约束", "生成任务拆解与动作序列", "设计失败反馈和重规划逻辑", "展示感知、规划、执行的闭环轨迹"],
+        milestones: ["任务语义清楚", "动作计划可视", "反馈闭环可展示"],
+        advice: "重点展示智能体为什么这么做。即使动作是模拟的，也要保留状态变化和失败恢复。"
+      },
+      {
+        match: ["脑机", "bci", "神经", "信号"],
+        stack: "signal-cleaning -> feature-bank -> intent-decoder -> insight-board",
+        focus: "把神经信号处理流程、分类结果和认知状态解释放在同一个知识工作台。",
+        impact: "A",
+        tasks: ["整理信号来源、采样率和预处理流程", "建立特征库和任务标签体系", "做分类或状态识别结果面板", "补充论文证据和方法对比"],
+        milestones: ["信号流程可追踪", "特征解释可阅读", "知识库可检索"],
+        advice: "BCI 方向要避免只展示炫酷概念，最好把信号处理、特征和任务范式都落到具体样例。"
+      },
+      {
+        match: ["多模态", "vlm", "论文", "助手", "图文"],
+        stack: "paper-ingest -> multimodal-index -> reasoning-agent -> answer-card",
+        focus: "用论文、图像和笔记作为输入，产出可追溯的研究摘要、方法对比和实验建议。",
+        impact: "A+",
+        tasks: ["整理论文、图像和笔记输入格式", "建立方法标签与检索索引", "设计回答卡片和证据引用", "加入实验复现建议和开放问题"],
+        milestones: ["资料库可检索", "回答可追溯", "研究助手可演示"],
+        advice: "多模态助手的关键不是聊天，而是能把证据、方法差异和下一步实验建议稳定输出。"
+      }
+    ];
+
+    function getMissionTemplate(goal) {
+      const normalized = String(goal || "").toLowerCase();
+      return missionTemplates.find(item => item.match.some(keyword => normalized.includes(keyword.toLowerCase()))) || {
+        stack: "idea -> data -> prototype -> feedback",
+        focus: "先做能跑通的最小闭环，再逐步补充评估、记录和展示细节。",
+        impact: "A",
+        tasks: ["明确目标用户、输入和输出", "准备 5 个可复现测试样例", "跑通最小模型或规则链路", "把结果做成可演示界面"],
+        milestones: ["目标边界明确", "最小闭环跑通", "演示版本可分享"],
+        advice: "如果目标还比较宽，先把它收敛成一个 3 分钟内能讲明白的 Demo。"
+      };
+    }
+
+    function getCockpitMetrics() {
+      const signal = Number(signalRange?.value || 78);
+      const model = Number(modelRange?.value || 82);
+      const system = Number(systemRange?.value || 74);
+      const readiness = Math.round(signal * 0.32 + model * 0.38 + system * 0.30);
+      const speed = Math.max(42, Math.min(98, readiness + Math.round((system - 70) * 0.25)));
+      const risk = readiness >= 84 ? "低" : readiness >= 68 ? "中" : "高";
+      return { signal, model, system, readiness, speed, risk };
+    }
+
+    function buildMissionPlan() {
+      const goal = String(missionInput?.value || "构建一个 AI Demo").trim() || "构建一个 AI Demo";
+      const template = getMissionTemplate(goal);
+      const metrics = getCockpitMetrics();
+      const priority = metrics.signal < 68 ? "数据样例与评估集" : metrics.model < 72 ? "模型推理链路" : metrics.system < 72 ? "前后端工程闭环" : "线上展示和复盘材料";
+      const days = metrics.readiness >= 84 ? [1, 3, 6] : metrics.readiness >= 68 ? [2, 5, 10] : [3, 8, 14];
+      const scopeRisk = Math.min(92, Math.max(12, goal.length * 2 + (100 - metrics.readiness)));
+      const risks = [
+        { label: "数据", value: Math.max(6, 100 - metrics.signal) },
+        { label: "模型", value: Math.max(6, 100 - metrics.model) },
+        { label: "工程", value: Math.max(6, 100 - metrics.system) },
+        { label: "范围", value: scopeRisk }
+      ];
+      return {
+        goal,
+        stack: template.stack,
+        focus: template.focus,
+        impact: template.impact,
+        priority,
+        tasks: template.tasks,
+        milestones: template.milestones.map((text, index) => ({ time: `D${days[index]}`, text })),
+        risks,
+        advice: template.advice,
+        createdAt: new Date().toLocaleString("zh-CN"),
+        ...metrics
+      };
+    }
+
+    function getMissionSummary(plan) {
+      if (!plan) return "";
+      return [
+        `> mission.compile("${plan.goal}")`,
+        `stack: ${plan.stack}`,
+        `readiness: ${plan.readiness}% | risk: ${plan.risk} | speed: ${plan.speed}% | impact: ${plan.impact}`,
+        `focus: ${plan.focus}`,
+        `tasks:`,
+        ...plan.tasks.map((task, index) => `  ${index + 1}. ${task}`),
+        `milestones: ${plan.milestones.map(item => `${item.time} ${item.text}`).join(" / ")}`,
+        `next: 优先补强 ${plan.priority}。`
+      ].join("\n");
+    }
+
+    function setMissionStatus(text) {
+      if (!missionStatus) return;
+      missionStatus.textContent = text;
+      if (text) setTimeout(() => {
+        if (missionStatus.textContent === text) missionStatus.textContent = "";
+      }, 2600);
+    }
+
+    function renderMissionPlan(plan, animate = false) {
+      if (!plan || !missionPreview) return;
+      plan = normalizeMissionPlan(plan);
+      currentMissionPlan = plan;
+      const activeCount = plan.readiness >= 86 ? 4 : plan.readiness >= 68 ? 3 : 2;
+      if (missionSpeed) missionSpeed.textContent = `${plan.speed}%`;
+      if (missionRisk) missionRisk.textContent = plan.risk;
+      if (missionImpact) missionImpact.textContent = plan.impact;
+
+      missionSteps.forEach((step, index) => {
+        step.classList.toggle("active", index < activeCount);
+      });
+
+      missionPreview.textContent = getMissionSummary(plan);
+
+      if (missionTasks) {
+        missionTasks.innerHTML = "";
+        plan.tasks.forEach((task, index) => {
+          const label = document.createElement("label");
+          label.className = "mission-task";
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.checked = index < activeCount - 1;
+          const span = document.createElement("span");
+          span.textContent = task;
+          label.append(checkbox, span);
+          missionTasks.appendChild(label);
+        });
+      }
+
+      if (missionMilestones) {
+        missionMilestones.innerHTML = "";
+        plan.milestones.forEach(item => {
+          const row = document.createElement("div");
+          row.className = "mission-milestone";
+          const time = document.createElement("strong");
+          time.textContent = item.time;
+          const text = document.createElement("span");
+          text.textContent = item.text;
+          row.append(time, text);
+          missionMilestones.appendChild(row);
+        });
+      }
+
+      if (missionRisks) {
+        missionRisks.innerHTML = "";
+        plan.risks.forEach(item => {
+          const row = document.createElement("div");
+          row.className = "mission-risk-row";
+          const label = document.createElement("span");
+          label.textContent = item.label;
+          const bar = document.createElement("div");
+          bar.className = "mission-risk-bar";
+          bar.style.setProperty("--risk", `${item.value}%`);
+          bar.appendChild(document.createElement("span"));
+          const value = document.createElement("b");
+          value.textContent = `${item.value}%`;
+          row.append(label, bar, value);
+          missionRisks.appendChild(row);
+        });
+      }
+
+      if (missionAdvice) {
+        missionAdvice.textContent = [
+          `priority: ${plan.priority}`,
+          `advice: ${plan.advice}`,
+          `history_stamp: ${plan.createdAt}`
+        ].join("\n");
+      }
+
+      if (animate) {
+        document.body.classList.add("launch-mode");
+        if (robotBubble) robotBubble.textContent = `任务已启动：${plan.goal}`;
+        setTimeout(() => document.body.classList.remove("launch-mode"), 1500);
+      }
+    }
+
+    function updateMissionSimulator(animate = false) {
+      if (!missionInput || !missionPreview) return;
+      renderMissionPlan(buildMissionPlan(), animate);
+    }
+
+    function safeMissionText(value, fallback = "", maxLength = 180) {
+      const text = String(value ?? fallback)
+        .replace(/[\u0000-\u001F\u007F]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, maxLength);
+      return text || fallback;
+    }
+
+    function clampMissionNumber(value, min, max, fallback) {
+      const number = Number(value);
+      if (!Number.isFinite(number)) return fallback;
+      return Math.min(max, Math.max(min, Math.round(number)));
+    }
+
+    function normalizeMissionPlan(plan) {
+      const source = plan && typeof plan === "object" ? plan : {};
+      const goal = safeMissionText(source.goal, "构建一个 AI Demo", 120);
+      const template = getMissionTemplate(goal);
+      const metrics = getCockpitMetrics();
+      const readiness = clampMissionNumber(source.readiness, 0, 100, metrics.readiness);
+      const speed = clampMissionNumber(source.speed, 0, 100, metrics.speed);
+      const risk = ["低", "中", "高"].includes(source.risk) ? source.risk : readiness >= 84 ? "低" : readiness >= 68 ? "中" : "高";
+      const fallbackDays = readiness >= 84 ? [1, 3, 6] : readiness >= 68 ? [2, 5, 10] : [3, 8, 14];
+      const tasks = Array.isArray(source.tasks) && source.tasks.length
+        ? source.tasks.slice(0, 6).map(task => safeMissionText(task, "补充任务", 120))
+        : template.tasks;
+      const milestones = Array.isArray(source.milestones) && source.milestones.length
+        ? source.milestones.slice(0, 4).map((item, index) => ({
+          time: safeMissionText(item?.time, `D${fallbackDays[index] || index + 1}`, 16),
+          text: safeMissionText(item?.text ?? item, template.milestones[index] || "完成阶段目标", 120)
+        }))
+        : template.milestones.map((text, index) => ({ time: `D${fallbackDays[index]}`, text }));
+      const risks = Array.isArray(source.risks) && source.risks.length
+        ? source.risks.slice(0, 6).map(item => ({
+          label: safeMissionText(item?.label, "风险", 24),
+          value: clampMissionNumber(item?.value, 0, 100, 50)
+        }))
+        : [
+          { label: "数据", value: Math.max(6, 100 - metrics.signal) },
+          { label: "模型", value: Math.max(6, 100 - metrics.model) },
+          { label: "工程", value: Math.max(6, 100 - metrics.system) },
+          { label: "范围", value: Math.min(92, Math.max(12, goal.length * 2 + (100 - readiness))) }
+        ];
+
+      return {
+        goal,
+        stack: safeMissionText(source.stack, template.stack, 160),
+        focus: safeMissionText(source.focus, template.focus, 220),
+        impact: safeMissionText(source.impact, template.impact, 8),
+        priority: safeMissionText(source.priority, metrics.signal < 68 ? "数据样例与评估集" : metrics.model < 72 ? "模型推理链路" : metrics.system < 72 ? "前后端工程闭环" : "线上展示和复盘材料", 80),
+        tasks,
+        milestones,
+        risks,
+        advice: safeMissionText(source.advice, template.advice, 240),
+        createdAt: safeMissionText(source.createdAt, new Date().toLocaleString("zh-CN"), 40),
+        signal: clampMissionNumber(source.signal, 0, 100, metrics.signal),
+        model: clampMissionNumber(source.model, 0, 100, metrics.model),
+        system: clampMissionNumber(source.system, 0, 100, metrics.system),
+        readiness,
+        speed,
+        risk
+      };
+    }
+
+    function readMissionHistory() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(missionHistoryKey) || "[]");
+        return Array.isArray(parsed) ? parsed.slice(0, 6).map(normalizeMissionPlan) : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function writeMissionHistory(items) {
+      try {
+        localStorage.setItem(missionHistoryKey, JSON.stringify(items.slice(0, 6).map(normalizeMissionPlan)));
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function renderMissionHistory() {
+      if (!missionHistory) return;
+      const items = readMissionHistory();
+      missionHistory.innerHTML = "";
+      if (!items.length) {
+        const empty = document.createElement("div");
+        empty.className = "activity-item";
+        empty.textContent = "还没有保存过方案。";
+        missionHistory.appendChild(empty);
+        return;
+      }
+      items.forEach(item => {
+        const button = document.createElement("button");
+        button.className = "mission-history-item";
+        button.type = "button";
+        button.textContent = item.goal;
+        const meta = document.createElement("span");
+        meta.textContent = `${item.createdAt} · 就绪度 ${item.readiness}% · 风险 ${item.risk}`;
+        button.appendChild(meta);
+        button.addEventListener("click", () => {
+          if (missionInput) missionInput.value = item.goal;
+          renderMissionPlan(item, true);
+          setMissionStatus("已载入历史方案。");
+        });
+        missionHistory.appendChild(button);
+      });
+    }
+
+    function saveCurrentMission() {
+      const plan = currentMissionPlan || buildMissionPlan();
+      const items = readMissionHistory().filter(item => item.goal !== plan.goal);
+      const ok = writeMissionHistory([plan, ...items]);
+      renderMissionHistory();
+      setMissionStatus(ok ? "方案已保存到本地浏览器。" : "保存失败：当前浏览器限制了 localStorage。");
+    }
+
+    async function copyMissionSummary() {
+      const text = getMissionSummary(currentMissionPlan || buildMissionPlan());
+      try {
+        await navigator.clipboard.writeText(text);
+        setMissionStatus("摘要已复制到剪贴板。");
+      } catch (error) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+        setMissionStatus("摘要已复制到剪贴板。");
+      }
+    }
+
+    function sendMissionToTerminal() {
+      const text = getMissionSummary(currentMissionPlan || buildMissionPlan());
+      typeTerminal(text);
+      document.getElementById("terminalBody")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      setMissionStatus("方案已发送到研究终端。");
+    }
+
+    function exportMissionJson() {
+      const plan = currentMissionPlan || buildMissionPlan();
+      const blob = new Blob([JSON.stringify(plan, null, 2)], { type: "application/json" });
+      const link = document.createElement("a");
+      const safeName = plan.goal.replace(/[\\/:*?"<>|]+/g, "-").slice(0, 36) || "mission-plan";
+      link.href = URL.createObjectURL(blob);
+      link.download = `${safeName}.json`;
+      document.body.appendChild(link);
+      link.click();
+      URL.revokeObjectURL(link.href);
+      link.remove();
+      setMissionStatus("JSON 方案已导出。");
+    }
+
+    missionChips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        missionChips.forEach(item => item.classList.remove("active"));
+        chip.classList.add("active");
+        if (missionInput) missionInput.value = chip.dataset.mission || chip.textContent;
+        updateMissionSimulator(true);
+      });
+    });
+
+    if (missionInput) {
+      missionInput.addEventListener("input", () => {
+        missionChips.forEach(item => item.classList.toggle("active", item.dataset.mission === missionInput.value));
+        updateMissionSimulator(false);
+      });
+    }
+
+    if (missionLaunch) {
+      missionLaunch.addEventListener("click", () => updateMissionSimulator(true));
+    }
+
+    if (missionSave) missionSave.addEventListener("click", saveCurrentMission);
+    if (missionCopy) missionCopy.addEventListener("click", copyMissionSummary);
+    if (missionSend) missionSend.addEventListener("click", sendMissionToTerminal);
+    if (missionExport) missionExport.addEventListener("click", exportMissionJson);
+
+    [signalRange, modelRange, systemRange].forEach(input => {
+      if (input) input.addEventListener("input", () => updateMissionSimulator(false));
+    });
+
+    updateMissionSimulator(false);
+    renderMissionHistory();
 
     const robotStage = document.getElementById("robotStage");
     const robotChat = document.getElementById("robotChat");
@@ -3119,6 +5160,18 @@
       {
         keys: ["交互", "命令", "控制台", "cockpit"],
         reply: "页面现在包含 Ctrl+K 命令面板、项目详情弹窗、Research Cockpit 控制台、滚动进度、移动端导航和增强研究终端。你可以在实验室区域调节三个滑杆观察系统指标变化。"
+      },
+      {
+        keys: ["任务", "模拟器", "mission", "demo", "路线"],
+        reply: "实验室区域新增了 Mission Simulator：输入一个研究或产品目标，它会结合 Cockpit 指标生成技术栈路线、风险等级、落地速度和下一步优先级。"
+      },
+      {
+        keys: ["3d", "三维", "宇宙", "空间", "旋转"],
+        reply: "页面新增了 3D Research Universe：它用原生 Canvas 做透视投影、节点深度排序、鼠标旋转和模式切换，把研究方向组织成可探索的空间网络。"
+      },
+      {
+        keys: ["演示", "导演", "自动", "路演", "答辩"],
+        reply: "页面新增了演示导演模式：底部控制台可以自动巡航首页、3D 宇宙、方向地图、项目、实验室和联系入口，也可以用 Shift+D 快速启动。"
       }
     ];
 
@@ -3201,6 +5254,98 @@
         robotStage.style.setProperty("--eye-y", eyeY + "px");
       });
     }
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function createDataRain() {
+      const rain = document.getElementById("dataRain");
+      if (!rain || prefersReducedMotion) return;
+      const tokens = ["AI", "01", "VLM", "AGENT", "BCI", "DATA", "SIM", "WORLD", "Q", "API"];
+      const count = Math.min(54, Math.max(24, Math.round(window.innerWidth / 28)));
+      rain.innerHTML = "";
+      for (let i = 0; i < count; i++) {
+        const bit = document.createElement("span");
+        bit.className = "data-bit";
+        bit.textContent = tokens[Math.floor(Math.random() * tokens.length)];
+        bit.style.setProperty("--x", `${Math.random() * 100}%`);
+        bit.style.setProperty("--duration", `${7 + Math.random() * 9}s`);
+        bit.style.setProperty("--delay", `${Math.random() * -12}s`);
+        bit.style.setProperty("--drift", `${(Math.random() - .5) * 90}px`);
+        rain.appendChild(bit);
+      }
+    }
+
+    createDataRain();
+    window.addEventListener("resize", createDataRain);
+
+    const tiltTargets = document.querySelectorAll(".direction-card, .project-card, .research-card, .process-card");
+    tiltTargets.forEach(target => {
+      target.classList.add("dynamic-tilt");
+      target.addEventListener("pointermove", event => {
+        if (prefersReducedMotion || event.pointerType === "touch") return;
+        const rect = target.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+        const rotateX = (0.5 - y) * 9;
+        const rotateY = (x - 0.5) * 11;
+        target.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+      });
+      target.addEventListener("pointerleave", () => {
+        target.style.transform = "";
+      });
+    });
+
+    document.querySelectorAll(".window-frame").forEach(frame => {
+      frame.addEventListener("pointermove", event => {
+        if (prefersReducedMotion) return;
+        const rect = frame.getBoundingClientRect();
+        frame.style.setProperty("--spot-x", `${((event.clientX - rect.left) / rect.width) * 100}%`);
+        frame.style.setProperty("--spot-y", `${((event.clientY - rect.top) / rect.height) * 100}%`);
+      });
+    });
+
+    const parallaxTargets = document.querySelectorAll(".orbit-panel, .direction-console, .window-frame, .robot-stage");
+
+    function updateParallax() {
+      if (prefersReducedMotion) return;
+      parallaxTargets.forEach((target, index) => {
+        const rect = target.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+        const centerOffset = rect.top + rect.height / 2 - window.innerHeight / 2;
+        const speed = index % 2 === 0 ? -0.025 : 0.018;
+        const shift = Math.max(-18, Math.min(18, centerOffset * speed));
+        target.style.setProperty("--parallax-y", `${shift}px`);
+        target.classList.add("parallax-soft");
+      });
+    }
+
+    window.addEventListener("scroll", updateParallax, { passive: true });
+    window.addEventListener("resize", updateParallax);
+    updateParallax();
+
+    let lastSpark = 0;
+    window.addEventListener("pointermove", event => {
+      if (prefersReducedMotion || event.pointerType === "touch") return;
+      const now = performance.now();
+      if (now - lastSpark < 42) return;
+      lastSpark = now;
+      const spark = document.createElement("span");
+      spark.className = "cursor-spark";
+      spark.style.left = `${event.clientX}px`;
+      spark.style.top = `${event.clientY}px`;
+      document.body.appendChild(spark);
+      setTimeout(() => spark.remove(), 680);
+    }, { passive: true });
+
+    window.addEventListener("pointerdown", event => {
+      if (prefersReducedMotion || event.pointerType === "touch") return;
+      const ripple = document.createElement("span");
+      ripple.className = "click-ripple";
+      ripple.style.left = `${event.clientX}px`;
+      ripple.style.top = `${event.clientY}px`;
+      document.body.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 760);
+    }, { passive: true });
   </script>
 </body>
 </html>
